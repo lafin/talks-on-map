@@ -1,0 +1,62 @@
+{
+  "name": "map-talks",
+  "version": "0.0.1",
+  "private": true,
+  "author": "lafin <kuvakin@gmail.com>",
+  "contributors": [],
+  "repository": "lafin/map-talks",
+  "license": "MIT",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "scripts": {
+    "prepublish": "npm prune",
+    "start": "node_modules/gulp/bin/gulp.js",
+    "vendor": "node_modules/gulp/bin/gulp.js vendor",
+    "prod": "PRODUCTION=true node_modules/gulp/bin/gulp.js prod",
+    "test": "mocha -R spec ./test/*.js",
+    "cov": "istanbul cover _mocha -- -R spec ./test/*.js"
+  },
+  "engine-strict": true,
+  "dependencies": {
+    "async": "^1.2.1",
+    "eventemitter3": "^1.1.1",
+    "express": "^4.13.0",
+    "jade": "^1.11.0",
+    "later": "^1.1.6",
+    "leaflet": "^0.7.3",
+    "lodash": "^3.9.3",
+    "logme": "^0.4.0",
+    "memory-cache": "^0.1.4",
+    "method-override": "^2.3.3",
+    "mongoose": "^4.0.6",
+    "morgan": "^1.6.0",
+    "node-uuid": "^1.4.3",
+    "posix": "^2.0.1",
+    "request": "^2.58.0",
+    "socket.io": "^1.3.5",
+    "xml2js": "^0.4.9"
+  },
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "bower": "^1.4.1",
+    "browserify": "^10.2.4",
+    "chalk": "^1.0.0",
+    "d3": "^3.5.5",
+    "gulp": "^3.9.0",
+    "gulp-base64": "^0.1.3",
+    "gulp-concat": "^2.6.0",
+    "gulp-csso": "^1.0.0",
+    "gulp-filter": "^2.0.2",
+    "gulp-if": "^1.2.5",
+    "gulp-less": "^3.0.3",
+    "gulp-nodemon": "^2.0.3",
+    "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^1.2.0",
+    "istanbul": "^0.3.16",
+    "mocha": "^2.2.5",
+    "react": "^0.13.3",
+    "react-router": "^0.13.3",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
