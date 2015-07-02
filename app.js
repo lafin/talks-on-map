@@ -2,21 +2,21 @@
  * Module dependencies.
  */
 
-var express = require('express'),
-    methodOverride = require('method-override'),
-    logger = require('morgan'),
-    path = require('path'),
-    fs = require('fs'),
-    Logme = require('logme').Logme,
-    hub = require('./lib/hub'),
-    config = require('./config'),
-    os = require('os'),
-    mongoose = require('mongoose'),
-    later = require('later');
+var express = require('express');
+var methodOverride = require('method-override');
+var logger = require('morgan');
+var path = require('path');
+var fs = require('fs');
+var Logme = require('logme').Logme;
+var hub = require('./lib/hub');
+var config = require('./config');
+var os = require('os');
+var mongoose = require('mongoose');
+var later = require('later');
 
 try {
-    var cpuCount = os.cpus().length,
-        limit = 4 * 1024 * cpuCount;
+    var cpuCount = os.cpus().length;
+    var limit = 4 * 1024 * cpuCount;
     require('posix').setrlimit('nofile', {
         soft: limit,
         hard: limit
@@ -36,12 +36,12 @@ hub.connectCounter = 0;
  */
 
 var logFile = fs.createWriteStream(__dirname + '/log.txt', {
-        flags: 'a'
-    }),
-    logme = hub.logme = new Logme({
-        stream: logFile,
-        theme: 'clean'
-    });
+    flags: 'a'
+});
+var logme = hub.logme = new Logme({
+    stream: logFile,
+    theme: 'clean'
+});
 
 /**
  * Create Express server.
@@ -53,8 +53,8 @@ var app = express();
  * Socket
  */
 
-var server = require('http').Server(app),
-    io = require('socket.io')(server);
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 
 /**
@@ -71,9 +71,9 @@ db.on('error', function (error) {
  * Controllers
  */
 
-var main = require('./controller/main'),
-    api = require('./controller/api'),
-    tracker = require('./controller/tracker');
+var main = require('./controller/main');
+var api = require('./controller/api');
+var tracker = require('./controller/tracker');
 
 later.date.localTime();
 for (var i = 0; i < config.tasks.length; i++) {
@@ -176,9 +176,9 @@ app.use(logger('combined', {
 }));
 
 app.use(methodOverride());
-var hour = 3600000,
-    day = hour * 24,
-    week = day * 7;
+var hour = 3600000;
+var day = hour * 24;
+var week = day * 7;
 app.use(express['static'](path.join(__dirname, 'build'), {
     maxAge: week
 }));

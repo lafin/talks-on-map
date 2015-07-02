@@ -53,14 +53,11 @@ message.on('messages:prepare', (values) => {
     });
 
 // routes
-import Router from 'react-router';
+import { Router, Route } from 'react-router';
+import { history } from 'react-router/lib/HashHistory';
 import Main from './components/Main.jsx';
 import Stats from './components/Stats.jsx';
 import Footer from './components/Footer.jsx';
-
-let DefaultRoute = Router.DefaultRoute;
-let Route = Router.Route;
-let RouteHandler = Router.RouteHandler;
 
 class App extends React.Component {
     constructor(props) {
@@ -70,7 +67,7 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <RouteHandler />
+                {this.props.children}
                 <Footer cities={this.props.cities}
                     city={this.props.city}
                     level={this.props.level}
@@ -82,11 +79,11 @@ class App extends React.Component {
     }
 }
 
-let routes = (<Route name="app" handler={App}>
-    <Route name="main" path="/" handler={Main} />
-    <Route name="stats" path="/stats" handler={Stats} />
-    <DefaultRoute handler={Main} />
-</Route>);
-Router.run(routes, function (Handler) {
-    React.render(<Handler city={info.getCity()} />, document.getElementById('app'));
-});
+React.render((
+    <Router history={history}>
+        <Route component={App}>
+            <Route path="/" component={Main} />
+            <Route path="/stats" component={Stats} />
+        </Route>
+    </Router>
+), document.getElementById('app'));

@@ -2,95 +2,171 @@
 import React from 'react';
 
 class Chart extends React.Component {
+
     constructor(props) {
         super(props);
+        this.margin = 30;
+        this.name = props.name;
+        this.data = props.data;
+        this.statsStore = React.stores.stats;
     }
 
-    createChart(name, data) {
-        if(!data) {
-            return;
+    parseData(data) {
+        let datum = [];
+        if(data) {
+            for(let i in data) {
+                if(data.hasOwnProperty(i)) {
+                    let d = data[i];
+                    d.date = new Date(d.date);
+                    d[this.name] = +d[this.name];
+                    datum.push(d);
+                }
+            }
         }
-        let margin = {
-                top: 15,
-                right: 15,
-                bottom: 30,
-                left: 30
-            },
-            width = 940 - margin.left - margin.right,
-            height = 180 - margin.top - margin.bottom;
+        return datum;
+    }
 
-        let x = d3.time.scale()
+    onChange(values) {
+        this.data = values;
+        this.clean();
+        this.updateData();
+    }
+
+    componentDidMount() {
+        d3.select(window).on('resize.' + this.name, this.update.bind(this));
+        this.statsStore.on('update', this.onChange, this);
+    }
+
+    componentWillUnmount() {
+        d3.select(window).on('resize.' + this.name, null);
+        this.statsStore.off('update', this.onChange, this);
+    }
+
+    clean() {
+        if(this.graph) {
+            this.graph.select('.x.axis').remove();
+            this.graph.select('.y.axis').remove();
+            this.graph.selectAll('.line').remove();
+        }
+    }
+
+    update() {
+        let margin = this.margin;
+        let xAxis = this.xAxis;
+        let yAxis = this.yAxis;
+        let graph = this.graph;
+
+        let selector = d3.select('#' + this.name);
+        let width = parseInt(selector.style('width'), 10) - margin * 2,
+            height = parseInt(selector.style('height'), 10) - margin * 2;
+
+        this.xScale.range([0, width]);
+        this.yScale.range([height, 0]);
+
+        xAxis.ticks(Math.max(width / 50, 2));
+        yAxis.ticks(Math.max(height / 50, 2));
+
+        graph.attr('width', width + margin * 2)
+            .attr('height', height + margin * 2);
+
+        graph.select('.x.axis')
+            .attr('transform', 'translate(0,' + height + ')')
+            .call(xAxis);
+
+        graph.select('.y.axis')
+            .call(yAxis);
+
+        this.updateData();
+    }
+
+    updateData() {
+        if(this.graph && this.data) {
+            this.graph.selectAll('.line')
+                .datum(this.parseData(this.data))
+                .attr('d', this.line);
+        }
+    }
+
+    create(data) {
+        if (!data) {
+            return;
+        } else if (this.graph) {
+            this.update();
+        }
+        let margin = this.margin;
+        let datum = this.parseData(data);
+
+        let selector = d3.select('#' + this.name);
+        let width = parseInt(selector.style('width'), 10) - margin * 2,
+            height = parseInt(selector.style('height'), 10) - margin * 2;
+
+        let xScale = d3.time.scale()
             .range([0, width]);
 
-        let y = d3.scale.linear()
+        let yScale = d3.scale.linear()
             .range([height, 0]);
 
         let xAxis = d3.svg.axis()
-            .scale(x)
+            .scale(xScale)
             .orient('bottom');
 
         let yAxis = d3.svg.axis()
-            .scale(y)
+            .scale(yScale)
             .orient('left');
 
         let line = d3.svg.line()
             .x((d) => {
-                return x(d.date);
+                return xScale(d.date);
             })
             .y((d) => {
-                return y(d[name]);
+                return yScale(d[this.name]);
             });
 
-        let datum = [];
-        for(let i in data) {
-            if(data.hasOwnProperty(i)) {
-                let d = data[i];
-                d.date = new Date(d.date);
-                datum.push(d);                
-            }
-        }
+        let graph = d3.select('#' + this.name)
+            .attr('width', width + margin * 2)
+            .attr('height', height + margin * 2)
+            .append('g')
+            .attr('transform', 'translate(' + margin + ',' + margin + ')');
 
-        x.domain(d3.extent(datum, (d) => {
+        xScale.domain(d3.extent(datum, (d) => {
             return d.date;
         }));
-        y.domain(d3.extent(datum, (d) => {
-            return d[name];
+        yScale.domain(d3.extent(datum, (d) => {
+            return d[this.name];
         }));
 
-        let container = d3.select('#' + name);
-        container.select('svg').remove();
-        let svg = container.append('svg');
-
-        svg.attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-        svg.append('g')
+        graph.append('g')
             .attr('class', 'x axis')
             .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis);
 
-        svg.append('g')
+        graph.append('g')
             .attr('class', 'y axis')
             .call(yAxis)
             .append('text')
             .attr('transform', 'rotate(-90)')
             .attr('y', 6)
-            .attr('dy', '5px')
+            .attr('dy', '.71em')
             .style('text-anchor', 'end')
-            .text(name);
+            .text(this.name);
 
-        svg.append('path')
+        graph.append('path')
             .datum(datum)
             .attr('class', 'line')
             .attr('d', line);
+
+        this.line = line;
+        this.xScale = xScale;
+        this.yScale = yScale;
+        this.xAxis = xAxis;
+        this.yAxis = yAxis;
+        this.graph = graph;
     }
 
     render() {
-        this.createChart(this.props.name, this.props.data);
+        this.create(this.data);
         return (
-            <div id={this.props.name}></div>
+            <svg id={this.name}></svg>
         );
     }
 }
@@ -146,19 +222,19 @@ class Stats extends React.Component {
     }
 
     render() {
-        let state = this.state;
+        let data = this.state;
         return (
             <div className="mask">
                 <div className="reveal-modal">
                     <p className="lead">Статистика</p>
-                    <div className="row">
-                        <div className="col-md-6">
+                    <div className="row stats">
+                        <div className="col-md-6 chart">
                             {['accident','level'].map((type) => {
-                                return <Chart name={type} data={state} />;
+                                return <Chart name={type} data={data} />;
                             })}
                         </div>
                         <div className="col-md-6">
-                            <Info data={state} />
+                            <Info data={data} />
                         </div>
                     </div>
                 </div>

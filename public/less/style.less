@@ -76,7 +76,7 @@ html, body, #map {
     z-index: 1000;
     .reveal-modal {
         border: @border;
-        background: #fff; 
+        background: #fff;
         margin: 0 10px;
         position: relative;
         top: 25%;
@@ -85,19 +85,40 @@ html, body, #map {
     }
 }
 
-.axis {
-    path, line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
-    text {
-        font-family: @font;
-        font-size: 10px;
-    }
+// charts
+.row {
+    margin-left: 0;
+    margin-right: 0;
 }
-.line {
-    fill: none;
-    stroke: steelblue;
-    stroke-width: 1.5px;
+.stats {
+    div {
+        &:first-child {
+            padding-left: 0;
+        }
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+    .axis {
+        path, line {
+            fill: none;
+            stroke: #555;
+            shape-rendering: crispEdges;
+        }
+        text {
+            fill: #555;
+            font: 10px sans-serif;
+        }
+    }
+    .line {
+        fill: none;
+        stroke: #ef0d0c;
+        stroke-width: 1.5px;
+    }
+    .chart {
+        svg {
+            width: 100%;
+            height: 200px;
+        }
+    }
 }
