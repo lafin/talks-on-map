@@ -1,8 +1,8 @@
-/* global d3, JSON */
+/* global d3 */
 import React from 'react';
+import ShitIsHappens from '../lib/ShitIsHappens';
 
 class Chart extends React.Component {
-
     constructor(props) {
         super(props);
         this.margin = 30;
@@ -95,7 +95,6 @@ class Chart extends React.Component {
         }
         let margin = this.margin;
         let datum = this.parseData(data);
-
         let selector = d3.select('#' + this.name);
         let width = parseInt(selector.style('width'), 10) - margin * 2,
             height = parseInt(selector.style('height'), 10) - margin * 2;
@@ -176,23 +175,26 @@ class Info extends React.Component {
         super(props);
     }
 
-    apparentTemperature(temperature, wind, humidity) {
-        let e = (humidity / 100) * 6.105 * Math.exp((17.27 * temperature) / (237.7 + temperature));
-        return temperature + 0.348 * e - 0.7 * wind - 4.25;
-    }
-
     render() {
-        var info = this.props.data;
-        let reallyTemperature = null;
-        let weather = null;
-        if (info) {
-            let lastKey = Object.keys(info).slice(-1)[0];
-            info = info[lastKey];
-            weather = info.weather;
-            reallyTemperature = this.apparentTemperature(+weather.temperature, weather.wind, weather.dampness);
+        let data = this.props.data;
+        let shitIsHappensIndex = null;
+        if (data) {
+            for (let i in data) {
+                if (data.hasOwnProperty(i)) {
+                    let d = data[i];
+                    d.index = ShitIsHappens.calculate(d);
+                }
+            }
+            let lastKey = Object.keys(data).slice(-1)[0];
+            shitIsHappensIndex = data[lastKey].index;
         }
         return (
-            <div>{reallyTemperature} {JSON.stringify(weather)}</div>
+            <div>
+                <div>Индекс паршивости (на текуший момент): <b>{shitIsHappensIndex}</b></div>
+                <div className="chart">
+                    <Chart name="index" data={data} />;
+                </div>
+            </div>
         );
     }
 }

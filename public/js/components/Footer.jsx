@@ -7,6 +7,7 @@ class Footer extends React.Component {
         this.state = props;
         this.infoStore = React.stores.info;
         this.infoAction = React.actions.info;
+        this.state.city = this.infoAction.getCity();
     }
 
     componentDidMount() {
@@ -51,7 +52,7 @@ class Footer extends React.Component {
                                     height="400"
                                     width="600"
                                     title=""
-                                    desc="" 
+                                    desc=""
                                     to={['vk','tw','fb','gp','in','mail']}/>
                             </span>
                             <span className="element hidden-sm hidden-xs">
