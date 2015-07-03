@@ -63,9 +63,6 @@ class Chart extends React.Component {
         this.xScale.range([0, width]);
         this.yScale.range([height, 0]);
 
-        xAxis.ticks(Math.max(width / 50, 2));
-        yAxis.ticks(Math.max(height / 50, 2));
-
         graph.attr('width', width + margin * 2)
             .attr('height', height + margin * 2);
 
@@ -231,8 +228,8 @@ class Stats extends React.Component {
                     <p className="lead">Статистика</p>
                     <div className="row stats">
                         <div className="col-md-6 chart">
-                            {['accident','level'].map((type) => {
-                                return <Chart name={type} data={data} />;
+                            {['accident','level'].map((type, key) => {
+                                return <Chart key={key} name={type} data={data} />;
                             })}
                         </div>
                         <div className="col-md-6">
