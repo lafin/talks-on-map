@@ -58,7 +58,7 @@ module.exports = {
         regionId: 10995
     }],
     tasks: [{
-        cron: '0 0 * * * *',
+        cron: '0 */20 * * * *',
         name: 'getInfo'
     }]
 };
