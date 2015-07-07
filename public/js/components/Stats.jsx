@@ -189,7 +189,7 @@ class Info extends React.Component {
             <div>
                 <div>Индекс паршивости (на текуший момент): <b>{shitIsHappensIndex}</b></div>
                 <div className="chart">
-                    <Chart name="index" data={data} />;
+                    <Chart name="index" data={data} />
                 </div>
             </div>
         );

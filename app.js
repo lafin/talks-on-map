@@ -123,7 +123,7 @@ io.on('connection', function (socket) {
             usemem: ((os.totalmem() - os.freemem()) / 1024 / 1024).toFixed(2)
         });
     });
-    console.log('a user connected');
+    // console.log('a user connected');
     hub.connectCounter += 1;
     socket.on('city:set', function (city) {
         socket.rooms.map(function (room) {
@@ -140,7 +140,7 @@ io.on('connection', function (socket) {
     });
     socket.on('disconnect', function () {
         hub.connectCounter -= 1;
-        console.log('user disconnected');
+        // console.log('user disconnected');
     });
 });
 

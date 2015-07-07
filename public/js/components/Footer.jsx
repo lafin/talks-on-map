@@ -45,23 +45,23 @@ class Footer extends React.Component {
                 <div className="container">
                     <div className="text-muted">
                         <div className="col-lg-6 col-md-6 col-sm-6">
-                            <span className="element hidden-md hidden-xs hidden-sm">Hello, I am lafin</span>
+                            <span className="element hidden-md hidden-xs hidden-sm">Hello, I am <a href="http://lafin.me/">lafin</a></span>
                             <span className="element">
                                 <Share
                                     url="http://map.lafin.me"
                                     height="400"
                                     width="600"
-                                    title=""
+                                    title="Карта, с дорожными событиями города"
                                     desc=""
-                                    to={['vk','tw','fb','gp','in','mail']}/>
+                                    to={['vk','tw','fb']}/>
                             </span>
                             <span className="element hidden-sm hidden-xs">
                                 <div className="btn-group btn-group-sm" role="group">
                                     <a href="#/" className="btn btn-sm btn-default">
-                                        <i className="glyphicon glyphicon-home" aria-hidden="true"></i>
+                                        <i className="glyphicon glyphicon-home" aria-hidden="true"></i> Главная
                                     </a>
                                     <a href="#/stats" className="btn btn-sm btn-default">
-                                        <i className="glyphicon glyphicon-stats" aria-hidden="true"></i>
+                                        <i className="glyphicon glyphicon-stats" aria-hidden="true"></i> Графики
                                     </a>
                                 </div>
                             </span>
