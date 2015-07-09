@@ -1,14 +1,27 @@
 class ShitIsHappens {
-    static apparentTemperature(temperature, wind, humidity) {
-        let e = (humidity / 100) * 6.105 * Math.exp((17.27 * temperature) / (237.7 + temperature));
-        return temperature + 0.348 * e - 0.7 * wind - 4.25;
+    static heatIndex(temperature, humidity) {
+        return -42.379 +
+            2.04901523 * temperature +
+            10.14333127 * humidity +
+            (-0.22475541) * temperature * humidity +
+            (-6.83783e-3) * temperature * temperature +
+            (-5.481717e-2) * humidity * humidity +
+            1.22874e-3 * temperature * temperature * humidity +
+            8.5282e-4 * temperature * humidity * humidity +
+            (-1.99e-6) * temperature * temperature * humidity * humidity;
     }
 
     // https://en.wikipedia.org/wiki/Room_temperature
-    static apparentTemperatureIndex(apparentTemp, temperature) {
+    static heatIndexIndex(heatIndex) {
         let index = 0;
-        if (apparentTemp < 20 || apparentTemp > 26) {
-            index = Math.abs(apparentTemp - temperature);
+        if(heatIndex >= 27 || heatIndex < 32) {
+            index = 1;
+        } else if(heatIndex >= 32 || heatIndex < 41) {
+            index = 2;
+        } else if(heatIndex >= 41 || heatIndex < 54) {
+            index = 3;
+        } else if(heatIndex >= 54) {
+            index = 4;
         }
         return index;
     }
@@ -44,8 +57,8 @@ class ShitIsHappens {
     static calculate(data) {
         let weather = data.weather;
         let temperature = +weather.temperature;
-        let apparentTemp = this.apparentTemperature(temperature, weather.wind, weather.dampness);
-        let shitIsHappensIndex = this.apparentTemperatureIndex(apparentTemp, temperature) +
+        let heatIndex = this.heatIndex(temperature, weather.dampness);
+        let shitIsHappensIndex = this.heatIndexIndex(heatIndex) +
             this.levelIndex(data.level) +
             this.windIndex(weather.wind) +
             this.dampnessIndex(weather.dampness);
