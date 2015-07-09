@@ -182,8 +182,9 @@ var getStatsInfo = function (city, callback) {
         return callback(new Error('Not set city'));
     }
     var now = Date.now();
+    var cityInfo = getCityInfoByName(city);
     Info.find({
-        city: getCityInfoByName(city).regionId,
+        city: cityInfo.regionId,
         date: {
             $lt: now,
             $gt: now - 604800000 // last week
@@ -196,6 +197,7 @@ var getStatsInfo = function (city, callback) {
             return {
                 date: d.date,
                 accident: d.accident,
+                population: cityInfo.population,
                 level: d.level,
                 weather: d.weather
             };

@@ -30,6 +30,10 @@ class ShitIsHappens {
         return index / 3;
     }
 
+    static accidentIndex(population, accident) {
+        return (accident / population) * 1e5;
+    }
+
     // http://www.ara.bme.hu/oktatas/tantargy/NEPTUN/BMEGEATMKK2+MKK4/2014-2015-I/ea/WIND%20COMFORT%20STUDIES.pdf
     static windIndex(wind) {
         let index = 0;
@@ -61,6 +65,7 @@ class ShitIsHappens {
         let shitIsHappensIndex = this.heatIndexIndex(heatIndex) +
             this.levelIndex(data.level) +
             this.windIndex(weather.wind) +
+            this.accidentIndex(data.population, data.accident) +
             this.dampnessIndex(weather.dampness);
         shitIsHappensIndex = Math.round(shitIsHappensIndex * 100) / 100;
         return shitIsHappensIndex;
