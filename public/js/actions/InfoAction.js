@@ -2,21 +2,23 @@ import React from 'react';
 import BaseAction from './BaseAction';
 
 class InfoAction extends BaseAction {
-	constructor(socket) {
-		super(arguments);
-		socket.on('city:info', (values) => {
-			React.stores.info.set(values);
-		});
-        socket.emit('city:set', this.getCity());
-	}
+  constructor(socket) {
+    super(arguments);
 
-	setCity(city) {
-		return localStorage.setItem('city', city);
-	}
+    socket.on('city:info', (values) => {
+      React.stores.info.set(values);
+    });
 
-	getCity() {
-		return localStorage.getItem('city') || 'Москва';
-	}
+    socket.emit('city:set', this.getCity());
+  }
+
+  setCity(city) {
+    return localStorage.setItem('city', city);
+  }
+
+  getCity() {
+    return localStorage.getItem('city') || 'Москва';
+  }
 }
 
 export default InfoAction;

@@ -1,34 +1,35 @@
-var mongoose = require('mongoose');
+'use strict';
 
-var itemSchema = new mongoose.Schema({
-    city: {
-        type: Number,
-        index: true
+let mongoose = require('mongoose');
+let itemSchema = new mongoose.Schema({
+  city: {
+    type: Number,
+    index: true
+  },
+  date: {
+    type: Date,
+    index: true
+  },
+  accident: {
+    type: Number
+  },
+  level: {
+    type: Number
+  },
+  weather: {
+    code: {
+      type: String
     },
-    date: {
-        type: Date,
-        index: true
+    wind: {
+      type: Number
     },
-    accident: {
-        type: Number
+    temperature: {
+      type: String
     },
-    level: {
-        type: Number
-    },
-    weather: {
-        code: {
-            type: String
-        },
-        wind: {
-            type: Number
-        },
-        temperature: {
-            type: String
-        },
-        dampness: {
-            type: Number
-        }
+    dampness: {
+      type: Number
     }
+  }
 });
 
 module.exports = mongoose.model('Info', itemSchema);

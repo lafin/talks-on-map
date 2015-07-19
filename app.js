@@ -1,32 +1,34 @@
+'use strict';
+
 /**
  * Module dependencies.
  */
 
-var express = require('express');
-var methodOverride = require('method-override');
-var logger = require('morgan');
-var path = require('path');
-var fs = require('fs');
-var Logme = require('logme').Logme;
-var hub = require('./lib/hub');
-var config = require('./config');
-var os = require('os');
-var mongoose = require('mongoose');
-var later = require('later');
+let express = require('express');
+let methodOverride = require('method-override');
+let logger = require('morgan');
+let path = require('path');
+let fs = require('fs');
+let hub = require('./lib/hub');
+let config = require('./config');
+let os = require('os');
+let mongoose = require('mongoose');
+let later = require('later');
+let posix = require('posix');
 
 try {
-    var cpuCount = os.cpus().length;
-    var limit = 4 * 1024 * cpuCount;
-    require('posix').setrlimit('nofile', {
-        soft: limit,
-        hard: limit
-    });
-} catch (e) {
-    console.error(e.message);
+  let cpuCount = os.cpus().length;
+  let limit = 4 * 1024 * cpuCount;
+  posix.setrlimit('nofile', {
+    soft: limit,
+    hard: limit
+  });
+} catch (error) {
+  console.error(error.message);
 }
 
 /**
- * Global vars
+ * Global lets
  */
 
 hub.connectCounter = 0;
@@ -35,129 +37,139 @@ hub.connectCounter = 0;
  * Logger
  */
 
-var logFile = fs.createWriteStream(__dirname + '/log.txt', {
-    flags: 'a'
-});
-var logme = hub.logme = new Logme({
-    stream: logFile,
-    theme: 'clean'
+let logFile = fs.createWriteStream(path.join(__dirname, '/log.txt'), {
+  flags: 'a'
 });
 
 /**
  * Create Express server.
  */
 
-var app = express();
+let app = express();
 
 /**
  * Socket
  */
 
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
+let server = require('http').Server(app);
+let io = require('socket.io')(server);
 
 /**
  * Mongoose
  */
 
 mongoose.connect(config.db);
-var db = mongoose.connection;
-db.on('error', function (error) {
-    console.error(error);
+let db = mongoose.connection;
+db.on('error', function(error) {
+  console.error(error);
 });
 
 /**
  * Controllers
  */
 
-var main = require('./controller/main');
-var api = require('./controller/api');
-var tracker = require('./controller/tracker');
+let main = require('./controller/main');
+let api = require('./controller/api');
+let tracker = require('./controller/tracker');
 
 later.date.localTime();
-for (var i = 0; i < config.tasks.length; i++) {
-    var task = config.tasks[i];
-    var scheduler = later.parse.cron(task.cron, true);
-    later.setInterval(tracker[task.name].bind(this, config.cities), scheduler);
+for (let i = 0; i < config.tasks.length; i++) {
+  let task = config.tasks[i];
+  let scheduler = later.parse.cron(task.cron, true);
+  later.setInterval(tracker[task.name].bind(this, config.cities), scheduler);
 }
 
 /**
  * Socket
  */
-var sendMessages = function (city, socket) {
-    return api.getMessages(city, function (error, response) {
-        if (error) {
-            return;
-        }
-        socket = socket || io.to(city);
-        socket.emit('city:messages', response);
-    });
+let sendMessages = function(city, socket) {
+  return api.getMessages(city, function(error, response) {
+    if (error) {
+      return;
+    }
+
+    socket = socket || io.to(city);
+    socket.emit('city:messages', response);
+  });
 };
 
-var sendInfo = function (city, socket) {
-    return api.getInfo(city, function (error, response) {
-        if (error) {
-            return;
-        }
-        socket = socket || io.to(city);
-        socket.emit('city:info', response);
-    });
+let sendInfo = function(city, socket) {
+  return api.getInfo(city, function(error, response) {
+    if (error) {
+      return;
+    }
+
+    socket = socket || io.to(city);
+    socket.emit('city:info', response);
+  });
 };
 
-var sendStats = function (city, socket) {
-    return api.getStats(city, function (error, response) {
-        if (error) {
-            return;
-        }
-        socket = socket || io.to(city);
-        socket.emit('city:stats', response);
-    });
+let sendStats = function(city, socket) {
+  return api.getStats(city, function(error, response) {
+    if (error) {
+      return;
+    }
+
+    socket = socket || io.to(city);
+    socket.emit('city:stats', response);
+  });
 };
 
-io.on('connection', function (socket) {
-    socket.on('ping', function () {
-        socket.emit('pong', {
-            loadavg: (os.loadavg()[0]).toFixed(2),
-            responseTime: Date.now(),
-            usemem: ((os.totalmem() - os.freemem()) / 1024 / 1024).toFixed(2)
-        });
+let getStatus = () => {
+  return {
+    loadavg: os.loadavg(),
+    localtime: Date.now(),
+    uptime: process.uptime(),
+    memoryUsage: process.memoryUsage()
+  };
+};
+
+io.on('connection', function(socket) {
+  socket.on('ping', function() {
+    socket.emit('pong', getStatus());
+  });
+
+  // console.log('a user connected');
+  hub.connectCounter += 1;
+  socket.on('city:set', function(city) {
+    socket.rooms.map(function(room) {
+      socket.leave(room);
     });
-    // console.log('a user connected');
-    hub.connectCounter += 1;
-    socket.on('city:set', function (city) {
-        socket.rooms.map(function (room) {
-            socket.leave(room);
-        });
-        socket.join(city);
-        // messages
-        sendMessages(city, socket);
-        // info
-        sendInfo(city, socket);
-    });
-    socket.on('city:stats', function (city) {
-        sendStats(city, socket);
-    });
-    socket.on('disconnect', function () {
-        hub.connectCounter -= 1;
-        // console.log('user disconnected');
-    });
+
+    socket.join(city);
+
+    // messages
+    sendMessages(city, socket);
+
+    // info
+    sendInfo(city, socket);
+  });
+
+  socket.on('city:stats', function(city) {
+    sendStats(city, socket);
+  });
+
+  socket.on('disconnect', function() {
+    hub.connectCounter -= 1;
+
+    // console.log('user disconnected');
+  });
 });
 
 // messages
-setInterval(function () {
-    for (var i = 0; i < config.cities.length; i++) {
-        var city = config.cities[i].name;
-        sendMessages(city);
-    }
+setInterval(function() {
+  for (let i = 0; i < config.cities.length; i++) {
+    let city = config.cities[i].name;
+    sendMessages(city);
+  }
 }, 5e3);
 
 // info
-setInterval(function () {
-    for (var i = 0; i < config.cities.length; i++) {
-        var city = config.cities[i].name;
-        sendInfo(city);
-    }
+setInterval(function() {
+  for (let i = 0; i < config.cities.length; i++) {
+    let city = config.cities[i].name;
+    sendInfo(city);
+  }
 }, 15e3);
 
 /**
@@ -169,50 +181,53 @@ app.set('views', path.join(__dirname, 'view'));
 app.set('view engine', 'jade');
 
 app.use(logger('combined', {
-    skip: function (req, res) {
-        return res.statusCode < 400;
-    },
-    stream: logFile
+  skip: function(req, res) {
+    return res.statusCode < 400;
+  },
+  stream: logFile
 }));
 
 app.use(methodOverride());
-var hour = 3600000;
-var day = hour * 24;
-var week = day * 7;
-app.use(express['static'](path.join(__dirname, 'build'), {
-    maxAge: week
+let hour = 3600000;
+let day = hour * 24;
+let week = day * 7;
+app.use(express.static(path.join(__dirname, 'build'), {
+  maxAge: week
 }));
 
 try {
 
-    /**
-     * Main routes.
-     */
+  /**
+   * Main routes.
+   */
+  app.get('/', main.index);
+  app.get('/status', (req, res) => {
+    return res.json(getStatus());
+  });
 
-    app.get('/', main.index);
+  /**
+   * Error handlers
+   */
+  app.use(function(req, res) {
+    res.status(404).render('error/404');
+  });
 
-    /**
-     * Error handlers
-     */
-    app.use(function (req, res) {
-        res.status(404).render('error/404');
+  app.use(function(err, req, res) {
+    res.status(500).render('error/50x', {
+      error: err
     });
-    app.use(function (err, req, res) {
-        res.status(500).render('error/50x', {
-            error: err
-        });
-    });
+  });
 
 } catch (error) {
-    logme.error(error.message);
+  console.error(error.message);
 }
 
 /**
  * Start Express server.
  */
 
-server.listen(app.get('port'), function () {
-    console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+server.listen(app.get('port'), function() {
+  console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
 
 module.exports = app;

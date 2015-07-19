@@ -1,118 +1,126 @@
-@border: solid 1px rgb(195, 195, 195);
+@z-index: 1001;
+@chart-line: rgb(66, 139, 202);
+@chart-text: rgb(51, 51, 51);
+@border-color: rgb(195, 195, 195);
+@leaf: rgb(255, 255, 255);
+@group-message: rgb(230, 228, 222);
+@selector-message: @border-color;
+
+@border: solid 1px @border-color;
 @font: 'Roboto', verdana, sans-serif;
 
 html, body, #map {
-    font-family: @font;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+  font-family: @font;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 #map {
-    position: absolute;
+  position: absolute;
 }
 #main {
-    height: 100%;
+  height: 100%;
 }
 .group {
-    &:nth-child(odd) {
-        background-color: rgb(230, 228, 222);
-    }
-    margin-bottom: 10px;
+  &:nth-child(odd) {
+    background: @group-message;
+  }
+  margin-bottom: 10px;
 }
 .messages {
-    overflow-y: auto;
-    background-color: rgba(255, 255, 255, 0.7);
-    height: 100%;
-    padding: 0;
-    border-left: @border;
-    .message {
-        word-wrap: break-word;
-        padding-left: 6px;
-        border-left: 4px solid transparent;
-        &:hover {
-            border-left: 4px solid gray;
-        }
+  z-index: @z-index;
+  overflow-y: auto;
+  background: @leaf;
+  height: 100%;
+  padding: 0;
+  border-left: @border;
+  .message {
+    word-wrap: break-word;
+    padding-left: 6px;
+    border-left: 4px solid transparent;
+    &:hover {
+      border-left: 4px solid @selector-message;
     }
+  }
 }
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%; /* Set the fixed height of the footer here */
-    height: 60px;
-    background-color: #f5f5f5;
-    padding: 15px 0;
-    z-index: 1001;
-    border-top: @border;
-    .container {
-        width: auto;
-        .text-muted {
-            .share {
-                display: inline-block;
-                margin-left: 20px;
-                margin-right: 20px;
-            }
-            .right {
-                float: right;
-            }
-            .element {
-                line-height: 30px;
-                margin-right: 10px;
-            }
-        }
+  position: absolute;
+  bottom: 0;
+  width: 100%; /* Set the fixed height of the footer here */
+  height: 60px;
+  background: @leaf;
+  padding: 15px 0;
+  z-index: @z-index;
+  border-top: @border;
+  .container {
+    width: auto;
+    .text-muted {
+      .share {
+        display: inline-block;
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+      .right {
+        float: right;
+      }
+      .element {
+        line-height: 30px;
+        margin-right: 10px;
+      }
     }
+  }
 }
 
 .mask {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    .reveal-modal {
-        border: @border;
-        background: #fff;
-        margin: 10px;
-        position: relative;
-        padding: 10px;
-        overflow-y: auto;
-    }
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: (@z-index)-1;
+  .reveal-modal {
+    border: @border;
+    background: @leaf;
+    margin: 10px;
+    position: relative;
+    padding: 10px;
+    overflow-y: auto;
+  }
 }
 
 // charts
 .row {
-    margin-left: 0;
-    margin-right: 0;
+  margin-left: 0;
+  margin-right: 0;
 }
 .stats {
-    div {
-        &:first-child {
-            padding-left: 0;
-        }
-        &:last-child {
-            padding-right: 0;
-        }
+  div {
+    &:first-child {
+      padding-left: 0;
     }
-    .axis {
-        path, line {
-            fill: none;
-            stroke: #555;
-            shape-rendering: crispEdges;
-        }
-        text {
-            fill: #555;
-            font: 10px sans-serif;
-        }
+    &:last-child {
+      padding-right: 0;
     }
-    .line {
-        fill: none;
-        stroke: #ef0d0c;
-        stroke-width: 1.5px;
+  }
+  .axis {
+    path, line {
+      fill: none;
+      stroke: @chart-text;
+      shape-rendering: crispEdges;
     }
-    .chart {
-        svg {
-            width: 100%;
-            height: 200px;
-        }
+    text {
+      fill: @chart-text;
+      font: 10px sans-serif;
     }
+  }
+  .line {
+    fill: none;
+    stroke: @chart-line;
+    stroke-width: 1px;
+  }
+  .chart {
+    svg {
+      width: 100%;
+      height: 200px;
+    }
+  }
 }
