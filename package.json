@@ -11,11 +11,11 @@
   },
   "scripts": {
     "prepublish": "npm prune",
-    "start": "node_modules/gulp/bin/gulp.js --harmony",
-    "vendor": "node_modules/gulp/bin/gulp.js --harmony vendor",
-    "prod": "PRODUCTION=true node_modules/gulp/bin/gulp.js --harmony prod",
-    "test": "mocha -R spec --harmony ./test/*.js",
-    "cov": "node --harmony ./node_modules/istanbul/lib/cli.js cover _mocha -- -R spec ./test/*.js"
+    "start": "node_modules/gulp/bin/gulp.js --harmony_arrow_functions",
+    "vendor": "node_modules/gulp/bin/gulp.js --harmony_arrow_functions vendor",
+    "prod": "PRODUCTION=true node_modules/gulp/bin/gulp.js --harmony_arrow_functions prod",
+    "test": "mocha -R spec --harmony_arrow_functions ./test/*.js",
+    "cov": "node --harmony_arrow_functions node_modules/istanbul/lib/cli.js cover _mocha -- -R spec ./test/*.js"
   },
   "engine-strict": true,
   "dependencies": {
