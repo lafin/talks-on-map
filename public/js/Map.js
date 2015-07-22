@@ -7,6 +7,7 @@ class Map extends EventEmitter {
   constructor(cityName) {
     super();
     this._checkZoomRange = false;
+    this._canUpdate = true;
     this._statesControl = {
       showAccidents: true,
       showHeatMap: true
@@ -20,9 +21,11 @@ class Map extends EventEmitter {
     });
   }
 
-  init(callback) {
-    callback = callback || function() {};
+  canUpdate() {
+    return this._canUpdate;
+  }
 
+  init(callback = function() {}) {
     let map;
     let heatmap;
     let markers;
@@ -47,6 +50,11 @@ class Map extends EventEmitter {
     map.addLayer(markers);
     accidents = new L.FeatureGroup();
     map.addLayer(accidents);
+    map.on('dragstart', () => {
+      this._canUpdate = false;
+    }).on('dragend', () => {
+      this._canUpdate = true;
+    });
     map.whenReady(callback.bind(this, map, heatmap, markers, accidents));
     L.easyButton('glyphicon-bell', this.showAccidentsToggle.bind(this), '', map);
     L.easyButton('glyphicon-flag', this.showHeatMapToggle.bind(this), '', map);
@@ -68,13 +76,11 @@ class Map extends EventEmitter {
     if (visible === undefined) {
       visible = canvas.style.display !== 'none';
     }
-
     if (visible) {
       canvas.style.display = 'none';
     } else {
       canvas.style.display = '';
     }
-
     this._statesControl.showHeatMap = canvas.style.display !== 'none';
     this.emit('controls:change', this.getStatesControl());
   }
@@ -83,13 +89,11 @@ class Map extends EventEmitter {
     if (visible === undefined) {
       visible = this.map.hasLayer(this.accidents);
     }
-
     if (visible) {
       this.map.removeLayer(this.accidents);
     } else {
       this.map.addLayer(this.accidents);
     }
-
     this._statesControl.showAccidents = this.map.hasLayer(this.accidents);
     this.emit('controls:change', this.getStatesControl());
   }
@@ -134,12 +138,10 @@ class Map extends EventEmitter {
     if (!clusters.length) {
       return 0;
     }
-
     for (; i < clusters.length; i++) {
       let cluster = clusters[i];
       if (cluster) {
-        for (let j = 0; j < cluster.length; j++) {
-          let point = cluster[j];
+        for (let point of cluster) {
           let dist = this.distance(point.lat, point.lon, coord.lat, coord.lon);
           if (dist < 1) {
             return i;
@@ -149,50 +151,42 @@ class Map extends EventEmitter {
         return 0;
       }
     }
-
     return i;
   }
 
   prepareMessages(preparedMessages) {
     let clusters = [];
-
-    for (let i = 0; i < preparedMessages.length; i++) {
-      let coord = preparedMessages[i];
+    for (let coord of preparedMessages) {
       let currentCluster = this.findClusterWithNearPoint(clusters, coord);
       if (!clusters[currentCluster]) {
         clusters[currentCluster] = [];
       }
-
       clusters[currentCluster].push(coord);
     }
-
-    for (let i = 0; i < clusters.length; i++) {
-      clusters[i].sort((a, b) => {
-        a = a.time;
-        b = b.time;
-        if (a < b) {
-          return -1;
-        } else if (a > b) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
+    let sortFn = (a, b) => {
+      a = a.time;
+      b = b.time;
+      let result = 0;
+      if (a < b) {
+        result = -1;
+      } else if (a > b) {
+        result = 1;
+      }
+      return result;
+    };
+    for (let cluster of clusters) {
+      cluster.sort(sortFn);
     }
-
     return clusters;
   }
 
-  prepare(data, callback) {
-    callback = callback || function() {};
-
+  prepare(data, callback = function() {}) {
     this.accidents.clearLayers();
     let messages = data.messages;
     let city = data.city;
     let addressMessages = [];
     let preparedMessages = [];
     let countAccident = 0;
-
     for (let i = 0; i < messages.length; i++) {
       let point = messages[i];
       preparedMessages[i] = {
@@ -205,10 +199,8 @@ class Map extends EventEmitter {
         countAccident += 1;
         this.addAccidentMarker(point);
       }
-
       addressMessages.push([point.coords.lat, point.coords.lon]);
     }
-
     if (!this._checkZoomRange && city.name === this.cityName) {
       this.map.fitBounds([
           [city.coords.tl_lat, city.coords.tl_lon],
@@ -216,7 +208,6 @@ class Map extends EventEmitter {
       ]);
       this._checkZoomRange = true;
     }
-
     this.heatmap.setLatLngs(addressMessages);
     return callback(this.prepareMessages(preparedMessages), countAccident);
   }

@@ -43,12 +43,14 @@ info.on('city:select', (city) => {
 });
 
 message.on('messages:prepare', (values) => {
-  map.prepare(values, (preparedValues, accident) => {
-    React.stores.message.set(preparedValues);
-    React.stores.info.set({
-      accident: accident
+  if (map.canUpdate()) {
+    map.prepare(values, (preparedValues, accident) => {
+      React.stores.message.set(preparedValues);
+      React.stores.info.set({
+        accident: accident
+      });
     });
-  });
+  }
 });
 
 message.on('message:select', (coord) => {

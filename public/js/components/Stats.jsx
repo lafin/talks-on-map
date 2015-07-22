@@ -177,25 +177,33 @@ class Info extends React.Component {
 
   render() {
     let data = this.props.data;
-    let shitIsHappensIndex = null;
+    let indexes = {};
     if (data) {
       for (let i in data) {
         if (data.hasOwnProperty(i)) {
           let d = data[i];
-          d.index = ShitIsHappens.calculate(d);
+          let indexes = ShitIsHappens.calculate(d);
+          d.index = indexes.shitIsHappensIndex;
+          d.indexes = indexes;
         }
       }
 
       let lastKey = Object.keys(data).slice(-1)[0];
-      shitIsHappensIndex = data[lastKey].index;
+      indexes = data[lastKey].indexes;
     }
 
     return (
       <div>
-        <div>Индекс паршивости (на текуший момент): <b>{shitIsHappensIndex}</b></div>
+        <div>Индекс паршивости (на текуший момент): <b>{indexes.shitIsHappensIndex}</b></div>
         <div className="chart">
           <Chart name="index" data={data} />
         </div>
+        {['heatIndex', 'levelIndex', 'windIndex', 'accidentIndex', 'dampnessIndex'].map((type, key) => {
+          let info = ShitIsHappens.translate(type);
+          if (indexes[type] > 0) {
+            return <div key={key}>{info.text}: +{indexes[type]}</div>;
+          }
+        })}
       </div>
     );
   }
@@ -233,11 +241,9 @@ class Stats extends React.Component {
           <p className="lead">Статистика</p>
           <div className="row stats">
             <div className="col-md-6 chart">
-
               {['accident', 'level'].map((type, key) => {
                 return <Chart key={key} name={type} data={data} />;
               })}
-
             </div>
             <div className="col-md-6">
               <Info data={data} />
