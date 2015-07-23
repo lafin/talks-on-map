@@ -72,11 +72,9 @@ class Message extends React.Component {
   render() {
     return (
       <div className="messages col-lg-3 col-md-3 hidden-sm hidden-xs pull-right">
-
         {this.state.message.map((group, key) => {
           return <Group key={key} group={group} />;
         })}
-
       </div>
     );
   }

@@ -27,7 +27,9 @@ gulp.task('js', function() {
     debug: true,
     ignore: []
   })
-  .transform(babelify)
+  .transform(babelify.configure({
+    loose: 'all'
+  }))
   .bundle().on('error', errorHandler)
   .pipe(source('script.js'))
   .pipe(gulpif(isProd, streamify(uglify())))
