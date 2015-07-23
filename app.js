@@ -18,7 +18,7 @@ let posix = require('posix');
 
 try {
   let cpuCount = os.cpus().length;
-  let limit = 4 * 1024 * cpuCount;
+  let limit = 10 * 1024 * cpuCount;
   posix.setrlimit('nofile', {
     soft: limit,
     hard: limit
