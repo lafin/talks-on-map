@@ -173,6 +173,14 @@ setInterval(function() {
 }, 15e3);
 
 /**
+ * Validate api keys
+ */
+
+let validateApiKey = (apiKey) => {
+  return apiKey && true;
+};
+
+/**
  * Express configuration.
  */
 
@@ -203,6 +211,25 @@ try {
   app.get('/', main.index);
   app.get('/status', (req, res) => {
     return res.json(getStatus());
+  });
+
+  app.get('/v1/:city/accidents', (req, res) => {
+    let apiKey = req.query.api_key;
+    if (validateApiKey(apiKey)) {
+      return api.getMessages(req.params.city, (error, response) => {
+        if (error) {
+          return res.json({
+            error: error.message
+          });
+        }
+        let accident = response.messages.filter(message => message.type === 0);
+        return res.json(accident);
+      });
+    } else {
+      return res.json({
+        error: 'Wrong api_key'
+      });
+    }
   });
 
   /**
