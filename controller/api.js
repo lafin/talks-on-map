@@ -223,6 +223,31 @@ let getStatsInfo = (city, callback) => {
   });
 };
 
+let cachedMessages = {};
+let mergeMessagesBeforeSave = (city, messages) => {
+  if (!cachedMessages.hasOwnProperty(city)) {
+    cachedMessages[city] = [];
+  }
+  for (let message of messages) {
+    let found = false;
+    for (let cachedMessage of cachedMessages[city]) {
+      if (message.text === cachedMessage.text &&
+        message.type === cachedMessage.type &&
+        (message.coords.lat).toFixed(4) === (message.coords.lat).toFixed(4) &&
+        (message.coords.lon).toFixed(4) === (message.coords.lon).toFixed(4)) {
+        cachedMessage.ttl = Date.now() + 30e3;
+        found = true;
+      }
+    }
+    if (!found) {
+      message.ttl = Date.now() + 30e3;
+      cachedMessages[city].push(message);
+    }
+  }
+  cachedMessages[city] = cachedMessages[city].filter(message => message.ttl > Date.now());
+  return cachedMessages[city];
+};
+
 module.exports = {
   getMessages: (city, callback) => {
     let messages = cache.get('messages:' + city);
@@ -234,7 +259,7 @@ module.exports = {
       if (error || !response) {
         return callback(error || new Error('Empty response'));
       }
-
+      response.messages = mergeMessagesBeforeSave(city, response.messages);
       cache.put('messages:' + city, response, 5000);
       return callback(null, response);
     });
