@@ -260,7 +260,7 @@ module.exports = {
         return callback(error || new Error('Empty response'));
       }
       response.messages = mergeMessagesBeforeSave(city, response.messages);
-      cache.put('messages:' + city, response, 5000);
+      cache.put('messages:' + city, response, 5e3);
       return callback(null, response);
     });
   },
@@ -276,7 +276,7 @@ module.exports = {
         return callback(error || new Error('Empty response'));
       }
 
-      cache.put('info:' + city, response, 15000);
+      cache.put('info:' + city, response, 15e3);
       return callback(null, response);
     });
   },
@@ -292,7 +292,7 @@ module.exports = {
         return callback(error || new Error('Empty response'));
       }
 
-      cache.put('stats:' + city, response, 15000);
+      cache.put('stats:' + city, response, 15e3);
       return callback(null, response);
     });
   }

@@ -128,14 +128,11 @@ io.on('connection', function(socket) {
   socket.on('ping', function() {
     socket.emit('pong', getStatus());
   });
-
-  // console.log('a user connected');
   hub.connectCounter += 1;
   socket.on('city:set', function(city) {
     socket.rooms.map(function(room) {
       socket.leave(room);
     });
-
     socket.join(city);
 
     // messages
@@ -144,15 +141,11 @@ io.on('connection', function(socket) {
     // info
     sendInfo(city, socket);
   });
-
   socket.on('city:stats', function(city) {
     sendStats(city, socket);
   });
-
   socket.on('disconnect', function() {
     hub.connectCounter -= 1;
-
-    // console.log('user disconnected');
   });
 });
 
@@ -222,7 +215,13 @@ try {
             error: error.message
           });
         }
-        let accident = response.messages.filter(message => message.type === 0);
+        let accident = response.messages.filter(message => message.type === 0).map((message) => {
+          return {
+            coords: message.coords,
+            text: message.text,
+            time: message.time
+          };
+        });
         return res.json(accident);
       });
     } else {

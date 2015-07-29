@@ -67,25 +67,29 @@ let saveResults = (results, callback) => {
   });
 };
 
-let self = module.exports = {
-  getInfo: (cities) => {
-    let date = Date.now();
-    collectionInfoData(cities, date, (error, results) => {
-      if (error) {
-        console.log('restart task getInfo');
-        console.error(error);
-        return self.getInfo(cities);
-      } else {
-        saveResults(results, (error) => {
-          if (error) {
-            console.log('restart task getInfo');
-            console.error(error);
-            return self.getInfo(cities);
-          } else {
-            return null;
-          }
-        });
-      }
-    });
-  }
+let getInfo = (cities) => {
+  let date = Date.now();
+  return collectionInfoData(cities, date, (error, results) => {
+    if (error) {
+      return tryRequestAgain(error, cities);
+    } else {
+      return saveResults(results, (error) => {
+        if (error) {
+          return tryRequestAgain(error, cities);
+        } else {
+          return null;
+        }
+      });
+    }
+  });
+};
+
+let tryRequestAgain = (error, cities) => {
+  console.log('restart task getInfo');
+  console.error(error);
+  return setTimeout(() => getInfo(cities), 5e3);
+};
+
+module.exports = {
+  getInfo: getInfo
 };
