@@ -90,7 +90,7 @@ gulp.task('server', function() {
   let nodemon = require('gulp-nodemon');
   nodemon({
     script: 'app.js',
-    nodeArgs: ['--harmony_arrow_functions'],
+    nodeArgs: ['--harmony_arrow_functions', '--nouse-idle-notification', '--expose-gc'],
     ext: 'jade js',
     ignore: ['public/**', 'build/**', 'node_modules/**']
   }).on('error', errorHandler);

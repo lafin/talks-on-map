@@ -17,8 +17,8 @@ let calculateAccident = (response) => {
 };
 
 let collectionInfoData = (cities, date, callback) => {
-  async.mapLimit(cities, 2, (city, mapLimitCallback) => {
-    async.parallel([
+  return async.mapLimit(cities, 2, (city, mapLimitCallback) => {
+    return async.parallel([
       (parallelCallback) => {
         api.getMessages(city.name, (error, response) => {
           if (error) {
@@ -62,7 +62,7 @@ let collectionInfoData = (cities, date, callback) => {
 };
 
 let saveResults = (results, callback) => {
-  Info.create(results, (error) => {
+  return Info.create(results, (error) => {
     return callback(error);
   });
 };
