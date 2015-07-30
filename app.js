@@ -215,13 +215,15 @@ try {
             error: error.message
           });
         }
-        let accident = response.messages.filter(message => message.type === 0).map((message) => {
-          return {
-            coords: message.coords,
-            text: message.text,
-            time: message.time
-          };
-        });
+        let accident = response.messages
+          .filter(message => message.type === 0)
+          .map((message) => {
+            return {
+              coords: message.coords,
+              text: message.text,
+              time: message.time
+            };
+          });
         return res.json(accident);
       });
     } else {

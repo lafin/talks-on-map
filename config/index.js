@@ -85,5 +85,8 @@ module.exports = {
   tasks: [{
     cron: '0 */20 * * * *',
     name: 'getInfo'
+  }, {
+    cron: '0 */1 * * * *',
+    name: 'gc'
   }]
 };

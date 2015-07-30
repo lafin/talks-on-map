@@ -67,7 +67,12 @@ let saveResults = (results, callback) => {
   });
 };
 
-let getInfo = (cities) => {
+let timeStart;
+let getInfo = (cities, noFirstStart) => {
+  noFirstStart = noFirstStart || false;
+  if (!noFirstStart) {
+    timeStart = Date.now();
+  }
   let date = Date.now();
   return collectionInfoData(cities, date, (error, results) => {
     if (error) {
@@ -85,11 +90,24 @@ let getInfo = (cities) => {
 };
 
 let tryRequestAgain = (error, cities) => {
-  console.log('restart task getInfo');
+  if ((Date.now() - timeStart) > 30e3) {
+    console.error('abort retry');
+    return null;
+  }
+  console.log('%s restart task getInfo', (new Date()).toString());
   console.error(error);
-  return setTimeout(() => getInfo(cities), 5e3);
+  return setTimeout(() => getInfo(cities, true), 5e3);
+};
+
+let gc = () => {
+  try {
+    global.gc();
+  } catch (e) {
+    console.error('need --expose-gc option for application');
+  }
 };
 
 module.exports = {
-  getInfo: getInfo
+  getInfo: getInfo,
+  gc: gc
 };
