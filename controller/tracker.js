@@ -20,7 +20,7 @@ let collectionInfoData = (cities, date, callback) => {
   return async.mapLimit(cities, 2, (city, mapLimitCallback) => {
     return async.parallel([
       (parallelCallback) => {
-        api.getMessages(city.name, (error, response) => {
+        return api.getMessages(city.name, (error, response) => {
           if (error) {
             return parallelCallback(error);
           }
@@ -32,7 +32,7 @@ let collectionInfoData = (cities, date, callback) => {
       },
 
       (parallelCallback) => {
-        api.getInfo(city.name, (error, info) => {
+        return api.getInfo(city.name, (error, info) => {
           if (error) {
             return parallelCallback(error);
           }
@@ -90,13 +90,13 @@ let getInfo = (cities, noFirstStart) => {
 };
 
 let tryRequestAgain = (error, cities) => {
-  if ((Date.now() - timeStart) > 30e3) {
+  if ((Date.now() - timeStart) > 150e3) {
     console.error('abort retry');
     return null;
   }
   console.log('%s restart task getInfo', (new Date()).toString());
   console.error(error);
-  return setTimeout(() => getInfo(cities, true), 5e3);
+  return setTimeout(() => getInfo(cities, true), 30e3);
 };
 
 let gc = () => {

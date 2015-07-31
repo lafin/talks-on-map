@@ -30,7 +30,7 @@ let getTrafficCongestion = (city, callback) => {
     return callback(new Error('Not set city'));
   }
 
-  request.get({
+  return request.get({
     url: config.cityinfo,
     qs: {
       region: getCityInfoByName(city).regionId,
@@ -42,7 +42,7 @@ let getTrafficCongestion = (city, callback) => {
       return callback(error || new Error('Empty response'));
     }
 
-    xmlParse(response.body, (error, response) => {
+    return xmlParse(response.body, (error, response) => {
       if (error) {
         return callback(error);
       }
@@ -61,7 +61,7 @@ let getTrafficCongestion = (city, callback) => {
         let traffic = response.info.traffic[0];
         let weather = response.info.weather[0].day[0].day_part[0];
 
-        callback(null, {
+        return callback(null, {
           level: traffic.level && traffic.level.length && +traffic.level[0],
           time: traffic.time && traffic.time.length && traffic.time[0],
           online: +hub.connectCounter,
@@ -84,7 +84,7 @@ let getMessages = (city, callback) => {
     return callback(new Error('Not set city'));
   }
 
-  request.get({
+  return request.get({
     url: config.geocode,
     qs: {
       geocode: city,
@@ -122,7 +122,7 @@ let getMessages = (city, callback) => {
     }
 
     if (coords) {
-      request.get({
+      return request.get({
         url: config.geopoints,
         qs: {
           uuid: uuid.v4(),
@@ -152,7 +152,7 @@ let getMessages = (city, callback) => {
           return callback(error || new Error('Empty response'));
         }
 
-        xmlParse(response.body, (error, response) => {
+        return xmlParse(response.body, (error, response) => {
           if (error || !response) {
             return callback(error || new Error('Empty response'));
           }
@@ -199,7 +199,7 @@ let getStatsInfo = (city, callback) => {
 
   let now = Date.now();
   let cityInfo = getCityInfoByName(city);
-  Info.find({
+  return Info.find({
     city: cityInfo.regionId,
     date: {
       $lt: now,

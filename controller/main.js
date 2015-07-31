@@ -1,6 +1,6 @@
 module.exports = {
   index: (req, res) => {
-    res.render('index', {
+    return res.render('index', {
       cache: true
     });
   }
