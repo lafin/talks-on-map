@@ -117,6 +117,7 @@ let sendStats = function(city, socket) {
 
 let getStatus = () => {
   return {
+    online: hub.connectCounter,
     loadavg: os.loadavg(),
     localtime: Date.now(),
     uptime: process.uptime(),
