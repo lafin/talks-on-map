@@ -1,3 +1,5 @@
+os:
+  - linux
 language: node_js
 
 node_js:
@@ -7,11 +9,19 @@ branches:
   only:
     - master
 
+# Send coverage data to Coveralls
+after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
+
+sudo: true
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
 install:
+  - export CXX=g++-4.8
   - npm install
 
 script:
   - npm run cov
-
-# Send coverage data to Coveralls
-after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
