@@ -63,7 +63,7 @@ message.on('message:unselect', (coord) => {
 
 // routes
 import { Router, Route } from 'react-router';
-import { history } from 'react-router/lib/HashHistory';
+import createHistory from 'history/lib/createHashHistory';
 import Main from './components/Main.jsx';
 import Stats from './components/Stats.jsx';
 import Footer from './components/Footer.jsx';
@@ -88,6 +88,7 @@ class App extends React.Component {
   }
 }
 
+let history = createHistory();
 React.render((
   <Router history={history}>
     <Route component={App}>
