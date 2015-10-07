@@ -20,67 +20,67 @@ module.exports = {
   }, {
     name: 'Санкт-Петербург',
     population: 5132e3,
-    regionId: 10174
+    regionId: 2
   }, {
     name: 'Ростов-на-Дону',
     population: 1110e3,
-    regionId: 11029
+    regionId: 39
   }, {
     name: 'Новосибирск',
     population: 1548e3,
-    regionId: 11316
+    regionId: 65
   }, {
     name: 'Екатеринбург',
     population: 1412e3,
-    regionId: 11162
+    regionId: 54
   }, {
     name: 'Нижний Новгород',
     population: 1264e3,
-    regionId: 11079
+    regionId: 47
   }, {
     name: 'Казань',
     population: 1191e3,
-    regionId: 11119
+    regionId: 43
   }, {
     name: 'Самара',
     population: 1172e3,
-    regionId: 11131
+    regionId: 51
   }, {
     name: 'Челябинск',
     population: 1169e3,
-    regionId: 11225
+    regionId: 56
   }, {
     name: 'Омск',
     population: 1166e3,
-    regionId: 11318
+    regionId: 66
   }, {
     name: 'Уфа',
     population: 1097e3,
-    regionId: 11111
+    regionId: 172
   }, {
     name: 'Красноярск',
     population: 1036e3,
-    regionId: 11309
+    regionId: 62
   }, {
     name: 'Пермь',
     population: 1026e3,
-    regionId: 11108
+    regionId: 50
   }, {
     name: 'Волгоград',
     population: 1018e3,
-    regionId: 10950
+    regionId: 38
   }, {
     name: 'Воронеж',
     population: 1014e3,
-    regionId: 10672
+    regionId: 193
   }, {
     name: 'Саратов',
     population: 841e3,
-    regionId: 11146
+    regionId: 194
   }, {
     name: 'Краснодар',
     population: 806e3,
-    regionId: 10995
+    regionId: 35
   }],
   tasks: [{
     cron: '0 */20 * * * *',

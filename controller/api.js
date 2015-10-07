@@ -1,21 +1,21 @@
 'use strict';
 
-let request = require('request');
-let xmlParse = require('xml2js').parseString;
-let uuid = require('node-uuid');
-let cache = require('memory-cache');
+const request = require('request');
+const xmlParse = require('xml2js').parseString;
+const uuid = require('node-uuid');
+const cache = require('memory-cache');
 
-let config = require('../config');
-let hub = require('../lib/hub');
-let Info = require('../model/Info');
-let utils = require('../lib/utils');
+const config = require('../config');
+const hub = require('../lib/hub');
+const Info = require('../model/Info');
+const utils = require('../lib/utils');
 
-let getCityInfoByName = (name) => {
+const getCityInfoByName = (name) => {
   if (!name) {
     throw new Error('Not set city');
   }
 
-  let cities = config.cities;
+  const cities = config.cities;
   for (let i = 0; i < cities.length; i++) {
     if (cities[i].name === name) {
       return cities[i];
@@ -25,7 +25,7 @@ let getCityInfoByName = (name) => {
   return null;
 };
 
-let getTrafficCongestion = (city, callback) => {
+const getTrafficCongestion = (city, callback) => {
   if (!city) {
     return callback(new Error('Not set city'));
   }
@@ -58,8 +58,8 @@ let getTrafficCongestion = (city, callback) => {
           response.info.weather[0].day[0].day_part &&
           response.info.weather[0].day[0].day_part.length) {
 
-        let traffic = response.info.traffic[0];
-        let weather = response.info.weather[0].day[0].day_part[0];
+        const traffic = response.info.traffic[0];
+        const weather = response.info.weather[0].day[0].day_part[0];
 
         return callback(null, {
           level: traffic.level && traffic.level.length && +traffic.level[0],
@@ -79,7 +79,7 @@ let getTrafficCongestion = (city, callback) => {
   });
 };
 
-let getMessages = (city, callback) => {
+const getMessages = (city, callback) => {
   if (!city) {
     return callback(new Error('Not set city'));
   }
@@ -101,7 +101,7 @@ let getMessages = (city, callback) => {
 
     let coords = null;
     let cityObj = null;
-    let messages = [];
+    const messages = [];
     if (response.body.response &&
         response.body.response.GeoObjectCollection &&
         response.body.response.GeoObjectCollection.featureMember &&
@@ -110,9 +110,9 @@ let getMessages = (city, callback) => {
         response.body.response.GeoObjectCollection.featureMember[0].GeoObject.boundedBy &&
         response.body.response.GeoObjectCollection.featureMember[0].GeoObject.boundedBy.Envelope) {
       cityObj = response.body.response.GeoObjectCollection.featureMember[0].GeoObject;
-      let rawCoords = cityObj.boundedBy.Envelope;
-      let lowerCorner = rawCoords.lowerCorner.split(' ');
-      let upperCorner = rawCoords.upperCorner.split(' ');
+      const rawCoords = cityObj.boundedBy.Envelope;
+      const lowerCorner = rawCoords.lowerCorner.split(' ');
+      const upperCorner = rawCoords.upperCorner.split(' ');
       coords = {
         tl_lat: +lowerCorner[1],
         tl_lon: +lowerCorner[0],
@@ -159,7 +159,7 @@ let getMessages = (city, callback) => {
 
           if (response.gpx && response.gpx.wpt) {
             for (let i = 0; i < response.gpx.wpt.length; i++) {
-              let point = response.gpx.wpt[i];
+              const point = response.gpx.wpt[i];
               messages.push({
                 type: +point.$.catidx,
                 coords: {
@@ -172,7 +172,7 @@ let getMessages = (city, callback) => {
             }
           }
 
-          let coordObj = cityObj.Point.pos.split(' ');
+          const coordObj = cityObj.Point.pos.split(' ');
           return callback(null, {
             city: {
               name: cityObj.name,
@@ -192,13 +192,13 @@ let getMessages = (city, callback) => {
   });
 };
 
-let getStatsInfo = (city, callback) => {
+const getStatsInfo = (city, callback) => {
   if (!city) {
     return callback(new Error('Not set city'));
   }
 
-  let now = Date.now();
-  let cityInfo = getCityInfoByName(city);
+  const now = Date.now();
+  const cityInfo = getCityInfoByName(city);
   return Info.find({
     city: cityInfo.regionId,
     date: {
@@ -223,14 +223,14 @@ let getStatsInfo = (city, callback) => {
   });
 };
 
-let cachedMessages = {};
-let mergeMessagesBeforeSave = (city, messages) => {
+const cachedMessages = {};
+const mergeMessagesBeforeSave = (city, messages) => {
   if (!cachedMessages.hasOwnProperty(city)) {
     cachedMessages[city] = [];
   }
-  for (let message of messages) {
+  for (const message of messages) {
     let found = false;
-    for (let cachedMessage of cachedMessages[city]) {
+    for (const cachedMessage of cachedMessages[city]) {
       if (message.text === cachedMessage.text &&
         message.type === cachedMessage.type &&
         (message.coords.lat).toFixed(4) === (message.coords.lat).toFixed(4) &&
@@ -250,7 +250,7 @@ let mergeMessagesBeforeSave = (city, messages) => {
 
 module.exports = {
   getMessages: (city, callback) => {
-    let messages = cache.get('messages:' + city);
+    const messages = cache.get('messages:' + city);
     if (messages) {
       return callback(null, messages);
     }
@@ -266,7 +266,7 @@ module.exports = {
   },
 
   getInfo: (city, callback) => {
-    let info = cache.get('info:' + city);
+    const info = cache.get('info:' + city);
     if (info) {
       return callback(null, info);
     }
@@ -282,7 +282,7 @@ module.exports = {
   },
 
   getStats: (city, callback) => {
-    let stats = cache.get('stats:' + city);
+    const stats = cache.get('stats:' + city);
     if (stats) {
       return callback(null, stats);
     }

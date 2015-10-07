@@ -4,6 +4,9 @@ class Group extends React.Component {
   constructor(props) {
     super(props);
     this.messageAction = React.actions.message;
+    this.state = {
+      group: props.group
+    };
   }
 
   selectMessage(lat, lot) {
@@ -20,15 +23,13 @@ class Group extends React.Component {
   render() {
     return (
       <div className="group">
-
-        {this.props.group.map((message, key) => {
-          return <div
+        {this.state.group.map((message, key) => {
+          return (<div
             key={key}
             onMouseLeave={this.unselectMessage.bind(this)}
             onMouseEnter={this.selectMessage.bind(this, message.lat, message.lon)}
-            className="message">{message.text}</div>;
+            className="message">{message.text}</div>);
         })}
-
       </div>
     );
   }
@@ -39,17 +40,6 @@ class Message extends React.Component {
     super(props);
     this.state = props;
     this.messageStore = React.stores.message;
-  }
-
-  recalcHeight() {
-    let documentHeight = document.body.clientHeight;
-    let windowHeight = window.innerHeight;
-    if (documentHeight >= windowHeight) {
-      let messages = document.querySelector('.messages');
-      if (messages) {
-        messages.style.height = (windowHeight - 60) + 'px';
-      }
-    }
   }
 
   componentDidMount() {
@@ -67,6 +57,17 @@ class Message extends React.Component {
     this.setState({
       message: values
     });
+  }
+
+  recalcHeight() {
+    const documentHeight = document.body.clientHeight;
+    const windowHeight = window.innerHeight;
+    if (documentHeight >= windowHeight) {
+      const messages = document.querySelector('.messages');
+      if (messages) {
+        messages.style.height = (windowHeight - 60) + 'px';
+      }
+    }
   }
 
   render() {

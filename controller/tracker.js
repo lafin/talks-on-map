@@ -1,13 +1,13 @@
 'use strict';
 
-let async = require('async');
-let Info = require('../model/Info');
-let api = require('./api');
+const async = require('async');
+const Info = require('../model/Info');
+const api = require('./api');
 
-let calculateAccident = (response) => {
+const calculateAccident = (response) => {
   let countAccident = 0;
   for (let i = 0; i < response.messages.length; i++) {
-    let message = response.messages[i];
+    const message = response.messages[i];
     if (message.type === 0) {
       countAccident += 1;
     }
@@ -16,7 +16,7 @@ let calculateAccident = (response) => {
   return countAccident;
 };
 
-let collectionInfoData = (cities, date, callback) => {
+const collectionInfoData = (cities, date, callback) => {
   return async.mapLimit(cities, 2, (city, mapLimitCallback) => {
     return async.parallel([
       (parallelCallback) => {
@@ -61,19 +61,19 @@ let collectionInfoData = (cities, date, callback) => {
   }, callback);
 };
 
-let saveResults = (results, callback) => {
+const saveResults = (results, callback) => {
   return Info.create(results, (error) => {
     return callback(error);
   });
 };
 
 let timeStart;
-let getInfo = (cities, noFirstStart) => {
+const getInfo = (cities, noFirstStart) => {
   noFirstStart = noFirstStart || false;
   if (!noFirstStart) {
     timeStart = Date.now();
   }
-  let date = Date.now();
+  const date = Date.now();
   return collectionInfoData(cities, date, (error, results) => {
     if (error) {
       return tryRequestAgain(error, cities);
@@ -89,7 +89,7 @@ let getInfo = (cities, noFirstStart) => {
   });
 };
 
-let tryRequestAgain = (error, cities) => {
+const tryRequestAgain = (error, cities) => {
   if ((Date.now() - timeStart) > 150e3) {
     console.error('abort retry');
     return null;
@@ -99,7 +99,7 @@ let tryRequestAgain = (error, cities) => {
   return setTimeout(() => getInfo(cities, true), 30e3);
 };
 
-let gc = () => {
+const gc = () => {
   try {
     global.gc();
   } catch (e) {

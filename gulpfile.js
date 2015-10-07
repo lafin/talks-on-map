@@ -1,20 +1,20 @@
 'use strict';
 
-let gulp = require('gulp');
-let concat = require('gulp-concat');
-let csso = require('gulp-csso');
-let base64 = require('gulp-base64');
-let uglify = require('gulp-uglify');
-let gulpif = require('gulp-if');
-let chalk = require('chalk');
+const gulp = require('gulp');
+const concat = require('gulp-concat');
+const csso = require('gulp-csso');
+const base64 = require('gulp-base64');
+const uglify = require('gulp-uglify');
+const gulpif = require('gulp-if');
+const chalk = require('chalk');
 
-let browserify = require('browserify');
-let babelify = require('babelify');
-let source = require('vinyl-source-stream');
-let streamify = require('gulp-streamify');
-let path = require('path');
+const browserify = require('browserify');
+const babelify = require('babelify');
+const source = require('vinyl-source-stream');
+const streamify = require('gulp-streamify');
+const path = require('path');
 
-let isProd = process.env.PRODUCTION === 'true' ? true : false;
+const isProd = process.env.PRODUCTION === 'true' ? true : false;
 
 function errorHandler(error) {
   return console.log(chalk.red(error.message));
@@ -37,7 +37,7 @@ gulp.task('js', function() {
 });
 
 gulp.task('less', function() {
-  let less = require('gulp-less');
+  const less = require('gulp-less');
   return gulp.src(['public/less/**/*.less'])
     .pipe(concat('style.css'))
     .pipe(less().on('error', errorHandler))
@@ -87,7 +87,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('server', function() {
-  let nodemon = require('gulp-nodemon');
+  const nodemon = require('gulp-nodemon');
   nodemon({
     script: 'app.js',
     nodeArgs: ['--harmony_arrow_functions', '--nouse-idle-notification', '--expose-gc'],

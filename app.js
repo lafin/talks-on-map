@@ -4,21 +4,21 @@
  * Module dependencies.
  */
 
-let express = require('express');
-let methodOverride = require('method-override');
-let logger = require('morgan');
-let path = require('path');
-let fs = require('fs');
-let hub = require('./lib/hub');
-let config = require('./config');
-let os = require('os');
-let mongoose = require('mongoose');
-let later = require('later');
-let posix = require('posix');
+const express = require('express');
+const methodOverride = require('method-override');
+const logger = require('morgan');
+const path = require('path');
+const fs = require('fs');
+const hub = require('./lib/hub');
+const config = require('./config');
+const os = require('os');
+const mongoose = require('mongoose');
+const later = require('later');
+const posix = require('posix');
 
 try {
-  let cpuCount = os.cpus().length;
-  let limit = 10 * 1024 * cpuCount;
+  const cpuCount = os.cpus().length;
+  const limit = 10 * 1024 * cpuCount;
   posix.setrlimit('nofile', {
     soft: limit,
     hard: limit
@@ -37,7 +37,7 @@ hub.connectCounter = 0;
  * Logger
  */
 
-let logFile = fs.createWriteStream(path.join(__dirname, '/log.txt'), {
+const logFile = fs.createWriteStream(path.join(__dirname, '/log.txt'), {
   flags: 'a'
 });
 
@@ -45,21 +45,21 @@ let logFile = fs.createWriteStream(path.join(__dirname, '/log.txt'), {
  * Create Express server.
  */
 
-let app = express();
+const app = express();
 
 /**
  * Socket
  */
 
-let server = require('http').Server(app);
-let io = require('socket.io')(server);
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 /**
  * Mongoose
  */
 
 mongoose.connect(config.db);
-let db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', function(error) {
   console.error(error);
 });
@@ -68,21 +68,21 @@ db.on('error', function(error) {
  * Controllers
  */
 
-let main = require('./controller/main');
-let api = require('./controller/api');
-let tracker = require('./controller/tracker');
+const main = require('./controller/main');
+const api = require('./controller/api');
+const tracker = require('./controller/tracker');
 
 later.date.localTime();
 for (let i = 0; i < config.tasks.length; i++) {
-  let task = config.tasks[i];
-  let scheduler = later.parse.cron(task.cron, true);
+  const task = config.tasks[i];
+  const scheduler = later.parse.cron(task.cron, true);
   later.setInterval(tracker[task.name].bind(this, config.cities), scheduler);
 }
 
 /**
  * Socket
  */
-let sendMessages = function(city, socket) {
+const sendMessages = function(city, socket) {
   return api.getMessages(city, function(error, response) {
     if (error) {
       return;
@@ -93,7 +93,7 @@ let sendMessages = function(city, socket) {
   });
 };
 
-let sendInfo = function(city, socket) {
+const sendInfo = function(city, socket) {
   return api.getInfo(city, function(error, response) {
     if (error) {
       return;
@@ -104,7 +104,7 @@ let sendInfo = function(city, socket) {
   });
 };
 
-let sendStats = function(city, socket) {
+const sendStats = function(city, socket) {
   return api.getStats(city, function(error, response) {
     if (error) {
       return;
@@ -115,7 +115,7 @@ let sendStats = function(city, socket) {
   });
 };
 
-let getStatus = () => {
+const getStatus = () => {
   return {
     online: hub.connectCounter,
     loadavg: os.loadavg(),
@@ -153,7 +153,7 @@ io.on('connection', function(socket) {
 // messages
 setInterval(function() {
   for (let i = 0; i < config.cities.length; i++) {
-    let city = config.cities[i].name;
+    const city = config.cities[i].name;
     sendMessages(city);
   }
 }, 5e3);
@@ -161,7 +161,7 @@ setInterval(function() {
 // info
 setInterval(function() {
   for (let i = 0; i < config.cities.length; i++) {
-    let city = config.cities[i].name;
+    const city = config.cities[i].name;
     sendInfo(city);
   }
 }, 15e3);
@@ -170,7 +170,7 @@ setInterval(function() {
  * Validate api keys
  */
 
-let validateApiKey = (apiKey) => {
+const validateApiKey = (apiKey) => {
   return apiKey && true;
 };
 
@@ -190,9 +190,9 @@ app.use(logger('combined', {
 }));
 
 app.use(methodOverride());
-let hour = 3600000;
-let day = hour * 24;
-let week = day * 7;
+const hour = 3600000;
+const day = hour * 24;
+const week = day * 7;
 app.use(express.static(path.join(__dirname, 'build'), {
   maxAge: week
 }));
@@ -208,7 +208,7 @@ try {
   });
 
   app.get('/v1/:city/accidents', (req, res) => {
-    let apiKey = req.query.api_key;
+    const apiKey = req.query.api_key;
     if (validateApiKey(apiKey)) {
       return api.getMessages(req.params.city, (error, response) => {
         if (error) {
@@ -216,7 +216,7 @@ try {
             error: error.message
           });
         }
-        let accident = response.messages
+        const accident = response.messages
           .filter(message => message.type === 0)
           .map((message) => {
             return {

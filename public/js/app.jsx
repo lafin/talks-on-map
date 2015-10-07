@@ -2,6 +2,7 @@
 /* globals JSON */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 // stores
 import MessageStore from './stores/MessageStore';
@@ -19,7 +20,7 @@ import Socket from './Socket';
 import MessageAction from './actions/MessageAction';
 import InfoAction from './actions/InfoAction';
 import StatsAction from './actions/StatsAction';
-let socket = new Socket();
+const socket = new Socket();
 React.actions = {
   message: new MessageAction(socket),
   info: new InfoAction(socket),
@@ -27,15 +28,15 @@ React.actions = {
 };
 
 import Map from './Map';
-let info = React.actions.info;
-let map = new Map(info.getCity());
+const info = React.actions.info;
+const map = new Map(info.getCity());
 map.on('controls:change', (states) => {
   localStorage.setItem('controls', JSON.stringify(states));
 });
 
-let states = localStorage.getItem('controls');
+const states = localStorage.getItem('controls');
 map.setStatesControl(JSON.parse(states));
-let message = React.actions.message;
+const message = React.actions.message;
 info.on('city:select', (city) => {
   map.setCity(city);
   info.setCity(city);
@@ -71,25 +72,34 @@ import Footer from './components/Footer.jsx';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      children: props.children,
+      cities: props.cities,
+      city: props.city,
+      level: props.level,
+      time: props.time,
+      online: props.online,
+      accident: props.accident
+    };
   }
 
   render() {
     return (
       <div>
-        {this.props.children}
-        <Footer cities={this.props.cities}
-          city={this.props.city}
-          level={this.props.level}
-          time={this.props.time}
-          online={this.props.online}
-          accident={this.props.accident} />
+        {this.state.children}
+        <Footer cities={this.state.cities}
+          city={this.state.city}
+          level={this.state.level}
+          time={this.state.time}
+          online={this.state.online}
+          accident={this.state.accident} />
       </div>
     );
   }
 }
 
-let history = createHistory();
-React.render((
+const history = createHistory();
+ReactDOM.render((
   <Router history={history}>
     <Route component={App}>
       <Route path="/" component={Main} />

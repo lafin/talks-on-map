@@ -4,10 +4,12 @@ import Share from './Share.jsx';
 class Footer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = props;
     this.infoStore = React.stores.info;
     this.infoAction = React.actions.info;
-    this.state.city = this.infoAction.getCity();
+    this.state = {
+      city: this.infoAction.getCity(),
+      cities: props.cities
+    };
   }
 
   componentDidMount() {
@@ -35,12 +37,12 @@ class Footer extends React.Component {
 
   onChangeCity(el) {
     el = el.target;
-    let value = el.options[el.selectedIndex].value;
+    const value = el.options[el.selectedIndex].value;
     this.infoAction.emit('city:select', value);
   }
 
   render() {
-    let state = this.state;
+    const state = this.state;
     return (
       <div className="footer">
         <div className="container">
@@ -71,11 +73,9 @@ class Footer extends React.Component {
             <div className="col-lg-6 col-md-6 col-sm-6 hidden-xs">
               <span className="right city">
                 <select className="form-control" onChange={this.onChangeCity.bind(this)} defaultValue={state.city}>
-
-                  {state.cities.map(function(city, key) {
+                  {state.cities.map((city, key) => {
                     return <option key={key}>{city}</option>;
                   })}
-
                 </select>
               </span>
               <span className="right element hidden-xs hidden-sm">

@@ -1,7 +1,7 @@
 'use strict';
 
-let mongoose = require('mongoose');
-let itemSchema = new mongoose.Schema({
+const mongoose = require('mongoose');
+const itemSchema = new mongoose.Schema({
   city: {
     type: Number,
     index: true
