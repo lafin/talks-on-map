@@ -22,9 +22,9 @@
     "async": "^1.4.2",
     "eventemitter3": "^1.1.1",
     "express": "^4.13.3",
-    "history": "^1.12.2",
+    "history": "^1.12.4",
     "jade": "^1.11.0",
-    "later": "^1.1.10",
+    "later": "^1.2.0",
     "leaflet": "^1.0.0-beta.1",
     "lodash": "^3.10.1",
     "memory-cache": "^0.1.4",
@@ -59,10 +59,10 @@
     "gulp-uglify": "^1.4.1",
     "istanbul": "^0.3.22",
     "mocha": "^2.3.3",
-    "nock": "^2.13.0",
+    "nock": "^2.15.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
-    "react-router": "^1.0.0-rc1",
+    "react-router": "^1.0.0-rc3",
     "vinyl-source-stream": "^1.1.0"
   }
 }

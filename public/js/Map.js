@@ -1,7 +1,7 @@
 // TODO need refactoring
 
 /* globals L */
-let EventEmitter = require('eventemitter3');
+const EventEmitter = require('eventemitter3');
 
 class Map extends EventEmitter {
   constructor(cityName) {
@@ -72,7 +72,7 @@ class Map extends EventEmitter {
   }
 
   showHeatMapToggle(visible) {
-    let canvas = this.heatmap._canvas;
+    const canvas = this.heatmap._canvas;
     if (visible === undefined) {
       visible = canvas.style.display !== 'none';
     }
@@ -104,7 +104,7 @@ class Map extends EventEmitter {
   }
 
   setMarker(coord) {
-    let marker = L.marker([coord.lat, coord.lot]);
+    const marker = L.marker([coord.lat, coord.lot]);
     this.markers.addLayer(marker);
   }
 
@@ -113,21 +113,21 @@ class Map extends EventEmitter {
   }
 
   addAccidentMarker(point) {
-    let icon = L.icon({
+    const icon = L.icon({
       iconUrl: 'vendor/image/notice_dtp.png',
       iconRetinaUrl: 'vendor/image/notice_dtp.png',
       iconSize: [32, 32]
     });
-    let accident = L.marker([point.coords.lat, point.coords.lon], {
+    const accident = L.marker([point.coords.lat, point.coords.lon], {
       icon: icon
     });
     this.accidents.addLayer(accident);
   }
 
   distance(lat1, lon1, lat2, lon2) {
-    let R = 6371;
-    let p = Math.PI / 180;
-    let a = 0.5 - Math.cos((lat2 - lat1) * p) / 2 +
+    const R = 6371;
+    const p = Math.PI / 180;
+    const a = 0.5 - Math.cos((lat2 - lat1) * p) / 2 +
         Math.cos(lat1 * p) * Math.cos(lat2 * p) *
         (1 - Math.cos((lon2 - lon1) * p)) / 2;
     return R * 2 * Math.asin(Math.sqrt(a));
@@ -139,10 +139,10 @@ class Map extends EventEmitter {
       return 0;
     }
     for (; i < clusters.length; i++) {
-      let cluster = clusters[i];
+      const cluster = clusters[i];
       if (cluster) {
-        for (let point of cluster) {
-          let dist = this.distance(point.lat, point.lon, coord.lat, coord.lon);
+        for (const point of cluster) {
+          const dist = this.distance(point.lat, point.lon, coord.lat, coord.lon);
           if (dist < 1) {
             return i;
           }
@@ -155,15 +155,15 @@ class Map extends EventEmitter {
   }
 
   prepareMessages(preparedMessages) {
-    let clusters = [];
-    for (let coord of preparedMessages) {
-      let currentCluster = this.findClusterWithNearPoint(clusters, coord);
+    const clusters = [];
+    for (const coord of preparedMessages) {
+      const currentCluster = this.findClusterWithNearPoint(clusters, coord);
       if (!clusters[currentCluster]) {
         clusters[currentCluster] = [];
       }
       clusters[currentCluster].push(coord);
     }
-    let sortFn = (a, b) => {
+    const sortFn = (a, b) => {
       a = a.time;
       b = b.time;
       let result = 0;
@@ -174,7 +174,7 @@ class Map extends EventEmitter {
       }
       return result;
     };
-    for (let cluster of clusters) {
+    for (const cluster of clusters) {
       cluster.sort(sortFn);
     }
     return clusters;
@@ -182,13 +182,13 @@ class Map extends EventEmitter {
 
   prepare(data, callback = function() {}) {
     this.accidents.clearLayers();
-    let messages = data.messages;
-    let city = data.city;
-    let addressMessages = [];
-    let preparedMessages = [];
+    const messages = data.messages;
+    const city = data.city;
+    const addressMessages = [];
+    const preparedMessages = [];
     let countAccident = 0;
     for (let i = 0; i < messages.length; i++) {
-      let point = messages[i];
+      const point = messages[i];
       preparedMessages[i] = {
         text: point.text,
         time: point.time,
