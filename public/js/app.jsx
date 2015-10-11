@@ -2,7 +2,7 @@
 /* globals JSON */
 
 import React from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 
 // stores
 import MessageStore from './stores/MessageStore';
@@ -86,7 +86,7 @@ class App extends React.Component {
 }
 
 const history = createHistory();
-React.render((
+ReactDOM.render((
   <Router history={history}>
     <Route component={App}>
       <Route path="/" component={Main} />

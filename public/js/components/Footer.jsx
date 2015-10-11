@@ -73,7 +73,7 @@ class Footer extends React.Component {
             <span className="right city">
               <select className="form-control" onChange={this.onChangeCity.bind(this)} defaultValue={state.city}>
                 {state.cities.map((city, key) => {
-                  return <option key={`city-id-${key}`}>{city}</option>;
+                  return <option key={`city-id-${key}`} value={city}>{city}</option>;
                 })}
               </select>
             </span>
