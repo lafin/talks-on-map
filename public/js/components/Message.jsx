@@ -4,9 +4,6 @@ class Message extends React.Component {
   constructor(props) {
     super(props);
     this.messageAction = React.actions.message;
-    this.state = {
-      message: props.message
-    };
   }
 
   selectMessage(lat, lot) {
@@ -21,12 +18,16 @@ class Message extends React.Component {
   }
 
   render() {
-    const message = this.state.message;
+    const message = this.props.message;
     return (<div
       onMouseLeave={this.unselectMessage.bind(this)}
       onMouseEnter={this.selectMessage.bind(this, message.lat, message.lon)}
       className="message">{message.text}</div>);
   }
 }
+
+Message.propTypes = {
+  message: React.PropTypes.object
+};
 
 export default Message;
