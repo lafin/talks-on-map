@@ -1,8 +1,5 @@
 // TODO need refactoring
-/* globals JSON */
-
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 // stores
 import MessageStore from './stores/MessageStore';
@@ -63,6 +60,7 @@ message.on('message:unselect', (coord) => {
 });
 
 // routes
+import ReactDOM from 'react-dom';
 import { Router, Route } from 'react-router';
 import createHistory from 'history/lib/createHashHistory';
 import Main from './components/Main.jsx';
@@ -72,25 +70,24 @@ import Footer from './components/Footer.jsx';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      children: props.children
-    };
   }
 
   render() {
     return (<div>
-      {this.state.children}
+      {this.props.children}
       <Footer {...this.props} />
     </div>);
   }
 }
 
+App.propTypes = {
+  children: React.PropTypes.object
+};
+
 const history = createHistory();
-ReactDOM.render((
-  <Router history={history}>
+ReactDOM.render((<Router history={history}>
     <Route component={App}>
       <Route path="/" component={Main} />
       <Route path="/stats" component={Stats} />
     </Route>
-  </Router>
-), document.getElementById('app'));
+  </Router>), document.getElementById('app'));
