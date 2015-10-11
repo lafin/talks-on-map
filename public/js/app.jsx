@@ -2,7 +2,7 @@
 /* globals JSON */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 
 // stores
 import MessageStore from './stores/MessageStore';
@@ -73,33 +73,20 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      children: props.children,
-      cities: props.cities,
-      city: props.city,
-      level: props.level,
-      time: props.time,
-      online: props.online,
-      accident: props.accident
+      children: props.children
     };
   }
 
   render() {
-    return (
-      <div>
-        {this.state.children}
-        <Footer cities={this.state.cities}
-          city={this.state.city}
-          level={this.state.level}
-          time={this.state.time}
-          online={this.state.online}
-          accident={this.state.accident} />
-      </div>
-    );
+    return (<div>
+      {this.state.children}
+      <Footer {...this.props} />
+    </div>);
   }
 }
 
 const history = createHistory();
-ReactDOM.render((
+React.render((
   <Router history={history}>
     <Route component={App}>
       <Route path="/" component={Main} />
