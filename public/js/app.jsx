@@ -88,6 +88,6 @@ const history = createHistory();
 ReactDOM.render((<Router history={history}>
     <Route component={App}>
       <Route path="/" component={Main} />
-      <Route path="/stats" component={Stats} />
+      <Route path="stats" component={Stats} />
     </Route>
   </Router>), document.getElementById('app'));

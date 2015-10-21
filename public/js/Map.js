@@ -34,7 +34,8 @@ class Map extends EventEmitter {
     map = L.map('map', {
       attributionControl: false,
       minZoom: 10,
-      maxZoom: 15
+      maxZoom: 15,
+      detectRetina: true
     })
     .setView([0, 0]);
     L.tileLayer('http://tiles.maps.sputnik.ru/tiles/{z}/{x}/{y}.png').addTo(map);
