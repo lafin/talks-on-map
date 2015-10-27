@@ -38,7 +38,7 @@ class Map extends EventEmitter {
       detectRetina: true
     })
     .setView([0, 0]);
-    L.tileLayer('http://tiles.maps.sputnik.ru/tiles/{z}/{x}/{y}.png').addTo(map);
+    L.tileLayer('http://tiles.maps.sputnik.ru/tiles/kmt2/{z}/{x}/{y}.png' + (L.Browser.retina ? '?tag=retina' : '')).addTo(map);
     heatmap = L.heatLayer([], {
       max: 0.2,
       gradient: {
