@@ -1,5 +1,6 @@
 import React from 'react';
 import Share from './Share.jsx';
+import { Link, IndexLink } from 'react-router';
 
 class Footer extends React.Component {
   constructor(props) {
@@ -55,16 +56,12 @@ class Footer extends React.Component {
                 width="600"
                 title="Карта, с дорожными событиями города"
                 desc=""
-                to={['vk', 'tw', 'fb']}/>
+                to={['vk', 'tw', 'fb']} />
             </span>
             <span className="element hidden-sm hidden-xs">
               <div className="btn-group btn-group-sm" role="group">
-                <a href="#/" className="btn btn-sm btn-default">
-                  <i className="glyphicon glyphicon-home" aria-hidden="true"></i> Главная
-                </a>
-                <a href="#/stats" className="btn btn-sm btn-default">
-                  <i className="glyphicon glyphicon-stats" aria-hidden="true"></i> Графики
-                </a>
+                <IndexLink to="/" className="btn btn-sm btn-default">Главная</IndexLink>
+                <Link to="/stats" className="btn btn-sm btn-default">Графики</Link>
               </div>
             </span>
           </div>

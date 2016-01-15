@@ -1,6 +1,6 @@
 class ShitIsHappens {
   static translate(index) {
-    let info = {
+    const info = {
       heatIndex: {
         text: 'Индекс теплоты',
         link: 'https://en.wikipedia.org/wiki/Heat_index'
@@ -27,7 +27,7 @@ class ShitIsHappens {
   }
 
   static heatIndex(temperature, humidity) {
-    let heatIndex = -42.379 +
+    const heatIndexValue = -42.379 +
         2.04901523 * temperature +
         10.14333127 * humidity +
         (-0.22475541) * temperature * humidity +
@@ -38,13 +38,13 @@ class ShitIsHappens {
         (-1.99e-6) * temperature * temperature * humidity * humidity;
 
     let index = 0;
-    if (heatIndex >= 27 || heatIndex < 32) {
+    if (heatIndexValue >= 27 || heatIndexValue < 32) {
       index = 1;
-    } else if (heatIndex >= 32 || heatIndex < 41) {
+    } else if (heatIndexValue >= 32 || heatIndexValue < 41) {
       index = 2;
-    } else if (heatIndex >= 41 || heatIndex < 54) {
+    } else if (heatIndexValue >= 41 || heatIndexValue < 54) {
       index = 3;
-    } else if (heatIndex >= 54) {
+    } else if (heatIndexValue >= 54) {
       index = 4;
     }
 
@@ -84,15 +84,15 @@ class ShitIsHappens {
   }
 
   static calculate(data) {
-    let weather = data.weather;
-    let temperature = +weather.temperature;
-    let heatIndex = this.heatIndex(temperature, weather.dampness);
-    let levelIndex = this.levelIndex(data.level);
-    let windIndex = this.windIndex(weather.wind);
-    let accidentIndex = this.accidentIndex(data.population, data.accident);
-    let dampnessIndex = this.dampnessIndex(weather.dampness);
-    let shitIsHappensIndex = heatIndex + levelIndex + windIndex + accidentIndex + dampnessIndex;
-    let round = (value) => {
+    const weather = data.weather;
+    const temperature = +weather.temperature;
+    const heatIndex = this.heatIndex(temperature, weather.dampness);
+    const levelIndex = this.levelIndex(data.level);
+    const windIndex = this.windIndex(weather.wind);
+    const accidentIndex = this.accidentIndex(data.population, data.accident);
+    const dampnessIndex = this.dampnessIndex(weather.dampness);
+    const shitIsHappensIndex = heatIndex + levelIndex + windIndex + accidentIndex + dampnessIndex;
+    const round = (value) => {
       return Math.round(value * 100) / 100;
     };
 

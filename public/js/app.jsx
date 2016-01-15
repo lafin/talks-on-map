@@ -60,9 +60,8 @@ message.on('message:unselect', (coord) => {
 });
 
 // routes
-import ReactDOM from 'react-dom';
-import { Router, Route } from 'react-router';
-import createHistory from 'history/lib/createHashHistory';
+import { render } from 'react-dom';
+import { browserHistory, Router, Route, IndexRoute } from 'react-router';
 import Main from './components/Main.jsx';
 import Stats from './components/Stats.jsx';
 import Footer from './components/Footer.jsx';
@@ -84,10 +83,9 @@ App.propTypes = {
   children: React.PropTypes.object
 };
 
-const history = createHistory();
-ReactDOM.render((<Router history={history}>
-    <Route component={App}>
-      <Route path="/" component={Main} />
+render((<Router history={browserHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={Main} />
       <Route path="stats" component={Stats} />
     </Route>
   </Router>), document.getElementById('app'));

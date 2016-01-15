@@ -9,7 +9,7 @@ const gulpif = require('gulp-if');
 const chalk = require('chalk');
 
 const browserify = require('browserify');
-const babelify = require('babelify');
+// const babelify = require('babelify');
 const source = require('vinyl-source-stream');
 const streamify = require('gulp-streamify');
 const path = require('path');
@@ -20,23 +20,26 @@ function errorHandler(error) {
   return console.log(chalk.red(error.message));
 }
 
-gulp.task('js', function() {
+gulp.task('js', function () {
   browserify({
     entries: path.join(__dirname, '/public/js/app.jsx'),
     extensions: ['.jsx', '.js'],
     debug: true,
     ignore: []
   })
-  .transform(babelify.configure({
-    loose: 'all'
-  }))
+  .transform('babelify', {
+    presets: ['es2015', 'react']
+  })
+  // .transform(babelify.configure({
+  //   loose: 'all'
+  // }))
   .bundle().on('error', errorHandler)
   .pipe(source('script.js'))
   .pipe(gulpif(isProd, streamify(uglify())))
   .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('less', function() {
+gulp.task('less', function () {
   const less = require('gulp-less');
   return gulp.src(['public/less/**/*.less'])
     .pipe(concat('style.css'))
@@ -46,12 +49,12 @@ gulp.task('less', function() {
     .pipe(gulp.dest('build/css'));
 });
 
-gulp.task('other', function() {
+gulp.task('other', function () {
   return gulp.src(['public/vendor/other/*'])
     .pipe(gulp.dest('build'));
 });
 
-gulp.task('vendor', function() {
+gulp.task('vendor', function () {
   // copy images
   gulp.src(['node_modules/leaflet/dist/images/*.png',
       'public/image/*'
@@ -81,12 +84,12 @@ gulp.task('vendor', function() {
     .pipe(gulp.dest('build/vendor'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   gulp.watch(['public/js/**/*.{js,jsx}', '*.{js,jsx}'], ['js']);
   gulp.watch(['public/less/**/*.less', '*.less'], ['less']);
 });
 
-gulp.task('server', function() {
+gulp.task('server', function () {
   const nodemon = require('gulp-nodemon');
   nodemon({
     script: 'app.js',

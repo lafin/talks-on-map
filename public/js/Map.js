@@ -25,7 +25,7 @@ class Map extends EventEmitter {
     return this._canUpdate;
   }
 
-  init(callback = function() {}) {
+  init(callback = function () {}) {
     let map;
     let heatmap;
     let markers;

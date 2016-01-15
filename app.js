@@ -60,7 +60,7 @@ const io = require('socket.io')(server);
 
 mongoose.connect(config.db);
 const db = mongoose.connection;
-db.on('error', function(error) {
+db.on('error', function (error) {
   console.error(error);
 });
 
@@ -82,8 +82,8 @@ for (let i = 0; i < config.tasks.length; i++) {
 /**
  * Socket
  */
-const sendMessages = function(city, socket) {
-  return api.getMessages(city, function(error, response) {
+const sendMessages = function (city, socket) {
+  return api.getMessages(city, function (error, response) {
     if (error) {
       return;
     }
@@ -93,8 +93,8 @@ const sendMessages = function(city, socket) {
   });
 };
 
-const sendInfo = function(city, socket) {
-  return api.getInfo(city, function(error, response) {
+const sendInfo = function (city, socket) {
+  return api.getInfo(city, function (error, response) {
     if (error) {
       return;
     }
@@ -104,8 +104,8 @@ const sendInfo = function(city, socket) {
   });
 };
 
-const sendStats = function(city, socket) {
-  return api.getStats(city, function(error, response) {
+const sendStats = function (city, socket) {
+  return api.getStats(city, function (error, response) {
     if (error) {
       return;
     }
@@ -125,16 +125,16 @@ const getStatus = () => {
   };
 };
 
-io.on('connection', function(socket) {
-  socket.on('ping', function() {
+io.on('connection', function (socket) {
+  socket.on('ping', function () {
     socket.emit('pong', getStatus());
   });
   hub.connectCounter += 1;
-  socket.on('city:set', function(city) {
-    socket.rooms.map(function(room) {
-      socket.leave(room);
-    });
-    socket.join(city);
+  socket.on('city:set', function (city) {
+    for (const room in this.rooms) {
+      this.leave(room);
+    }
+    this.join(city);
 
     // messages
     sendMessages(city, socket);
@@ -142,16 +142,16 @@ io.on('connection', function(socket) {
     // info
     sendInfo(city, socket);
   });
-  socket.on('city:stats', function(city) {
+  socket.on('city:stats', function (city) {
     sendStats(city, socket);
   });
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function () {
     hub.connectCounter -= 1;
   });
 });
 
 // messages
-setInterval(function() {
+setInterval(function () {
   for (let i = 0; i < config.cities.length; i++) {
     const city = config.cities[i].name;
     sendMessages(city);
@@ -159,7 +159,7 @@ setInterval(function() {
 }, 5e3);
 
 // info
-setInterval(function() {
+setInterval(function () {
   for (let i = 0; i < config.cities.length; i++) {
     const city = config.cities[i].name;
     sendInfo(city);
@@ -183,7 +183,7 @@ app.set('views', path.join(__dirname, 'view'));
 app.set('view engine', 'jade');
 
 app.use(logger('combined', {
-  skip: function(req, res) {
+  skip: (req, res) => {
     return res.statusCode < 400;
   },
   stream: logFile
@@ -234,14 +234,16 @@ try {
     }
   });
 
+  app.get('*', main.index);
+
   /**
    * Error handlers
    */
-  app.use(function(req, res) {
+  app.use(function (req, res) {
     res.status(404).render('error/404');
   });
 
-  app.use(function(err, req, res) {
+  app.use(function (err, req, res) {
     res.status(500).render('error/50x', {
       error: err
     });
@@ -255,7 +257,7 @@ try {
  * Start Express server.
  */
 
-server.listen(app.get('port'), function() {
+server.listen(app.get('port'), function () {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
 
