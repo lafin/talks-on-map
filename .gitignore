@@ -1,6 +1,6 @@
-node_modules/
-bower_components/
-npm-debug.log
-log.txt
-config/secret.js
-coverage/
+.DS_STORE
+node_modules
+static
+.module-cache
+*.log*
+
