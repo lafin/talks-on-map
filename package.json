@@ -38,14 +38,12 @@
   },
   "dependencies": {
     "brfs": "^1.4.3",
-    "immutable": "^3.7.6",
     "json-loader": "^0.5.4",
     "r-dom": "^2.1.0",
-    "raster-tile-style": "^1.0.1",
     "react-map-gl": "^0.6.4",
     "react-map-gl-heatmap-overlay": "^1.1.0",
     "transform-loader": "^0.2.3",
     "webgl-heatmap": "^0.2.3",
-    "worker-loader": "^0.7.0"
+    "webworkify-webpack": "^1.0.4"
   }
 }

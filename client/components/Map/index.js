@@ -5,28 +5,32 @@ import style from './style.css'
 
 import MapGL from 'react-map-gl'
 import HeatmapOverlay from 'react-map-gl-heatmap-overlay'
-import Immutable from 'immutable'
-import rasterTileStyle from 'raster-tile-style'
 
 class Map extends Component {
   constructor(props, context) {
     super(props, context)
+    this.state = {
+      map: {
+        width: 700,
+        height: 450,
+        latitude: 37.785,
+        longitude: -122.459,
+        zoom: 11.136,
+        mapStyle: 'mapbox://styles/mapbox/streets-v8',
+        mapboxApiAccessToken: 'pk.eyJ1IjoibGFmaW4iLCJhIjoiY2lrbjQ2cWs4MDA4YXcwbTRhOWZ0a2UwZSJ9.uWxtYDe0xyX4ZnilLQWcig'
+      }
+    }
+  }
+
+  onChangeViewport(opt) {
+    this.setState({
+      map: Object.assign({}, this.state.map, opt)
+    });
   }
 
   render() {
     const { talks } = this.props
-
-    const tileSource = '//tiles.maps.sputnik.ru/tiles/kmt2/{z}/{x}/{y}.png?tag=retina'
-    const mapStyle = Immutable.fromJS(rasterTileStyle([tileSource]))
-    const overlay = {
-      width: 700,
-      height: 450,
-      latitude: 37.785,
-      longitude: -122.459,
-      zoom: 11.136,
-      // mapStyle: mapStyle,
-      mapboxApiAccessToken: 'pk.eyJ1IjoibGFmaW4iLCJhIjoiY2lrbjQ2cWs4MDA4YXcwbTRhOWZ0a2UwZSJ9.uWxtYDe0xyX4ZnilLQWcig'
-    }
+    const overlay = this.state.map
     const locations = [{
       latitude: 37.785,
       longitude: -122.459
@@ -46,7 +50,8 @@ class Map extends Component {
 
     return (
       <MapGL
-        {...overlay}>
+        {...overlay}
+        onChangeViewport={this.onChangeViewport.bind(this)} >
         <HeatmapOverlay
           {...overlay}
           locations={locations}

@@ -40,11 +40,6 @@ module.exports = {
         loader: 'transform/cacheable?brfs'
       },
       {
-        test: /\.js$/,
-        include: path.resolve(__dirname, 'node_modules/webworkify/index.js'),
-        loader: 'worker'
-      },
-      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loaders: [
@@ -55,7 +50,10 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    alias: {
+      webworkify: 'webworkify-webpack'
+    }
   },
   postcss: [
     rucksack({
