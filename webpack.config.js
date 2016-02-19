@@ -22,31 +22,21 @@ module.exports = {
       {
         test: /\.css$/,
         loaders: [
-          'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.(glsl|frag|vert)$/,
-        include: path.resolve(__dirname, 'node_modules/webgl-heatmap'),
-        loader: 'raw!glslify'
-      },
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loaders: [
-          'react-hot',
-          'babel-loader'
+          'style',
+          'css?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'postcss'
         ]
       },
       {
         test: /\.json$/,
-        loader: 'json-loader'
+        loader: 'json'
       },
       {
         test: /\.js$/,
-        include: path.resolve(__dirname, 'node_modules/mapbox-gl/js/render/shaders.js'),
+        include: [
+          path.resolve(__dirname, 'node_modules/webgl-heatmap'),
+          path.resolve(__dirname, 'node_modules/mapbox-gl/js/render/shaders.js')
+        ],
         loader: 'transform/cacheable?brfs'
       },
       {
@@ -54,6 +44,14 @@ module.exports = {
         include: path.resolve(__dirname, 'node_modules/webworkify/index.js'),
         loader: 'worker'
       },
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        loaders: [
+          'react-hot',
+          'babel'
+        ]
+      }
     ],
   },
   resolve: {

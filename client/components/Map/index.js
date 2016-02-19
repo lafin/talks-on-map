@@ -23,7 +23,9 @@ class Map extends Component {
       height: 450,
       latitude: 37.785,
       longitude: -122.459,
-      zoom: 11.136
+      zoom: 11.136,
+      // mapStyle: mapStyle,
+      mapboxApiAccessToken: 'pk.eyJ1IjoibGFmaW4iLCJhIjoiY2lrbjQ2cWs4MDA4YXcwbTRhOWZ0a2UwZSJ9.uWxtYDe0xyX4ZnilLQWcig'
     }
     const locations = [{
       latitude: 37.785,
@@ -44,8 +46,7 @@ class Map extends Component {
 
     return (
       <MapGL
-        {...overlay}
-        mapStyle={mapStyle}>
+        {...overlay}>
         <HeatmapOverlay
           {...overlay}
           locations={locations}
