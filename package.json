@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "brfs": "^1.4.3",
+    "immutable": "^3.7.6",
     "json-loader": "^0.5.4",
     "r-dom": "^2.1.0",
     "react-map-gl": "^0.6.4",
