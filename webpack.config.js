@@ -33,10 +33,6 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        include: [
-          path.resolve(__dirname, 'node_modules/webgl-heatmap'),
-          path.resolve(__dirname, 'node_modules/mapbox-gl/js/render/shaders.js')
-        ],
         loader: 'transform/cacheable?brfs'
       },
       {
@@ -69,5 +65,6 @@ module.exports = {
   devServer: {
     contentBase: './client',
     hot: true
-  }
+  },
+  bail: process.env.TRAVIS || false
 }
