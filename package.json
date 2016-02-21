@@ -42,6 +42,7 @@
     "r-dom": "^2.1.0",
     "react-map-gl": "^0.6.4",
     "react-map-gl-heatmap-overlay": "^1.1.0",
+    "socket.io-client": "^1.4.5",
     "transform-loader": "^0.2.3",
     "webgl-heatmap": "^0.2.3",
     "webworkify-webpack": "^1.0.4"

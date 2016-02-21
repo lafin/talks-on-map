@@ -9,5 +9,11 @@ const initialState = [{
 }]
 
 export default handleActions({
+  'set city' (state, action) {
+    return state
+  },
 
+  'get talks' (state, action) {
+    return state
+  }
 }, initialState)

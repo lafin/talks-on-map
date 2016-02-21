@@ -9,13 +9,21 @@ class MainSection extends Component {
     super(props, context)
   }
 
+  componentDidMount() {
+    const { talks, actions, socket } = this.props
+    socket.emit('get points')
+    socket.on('get points', () =>
+      actions.getTalks()
+    );
+  }
+
   render() {
     const { talks, actions } = this.props
 
     return (
       <section className={style.main}>
-        <Map />
-        <Message />
+        <Map talks={talks} actions={actions} />
+        <Message talks={talks} actions={actions} />
       </section>
     )
   }

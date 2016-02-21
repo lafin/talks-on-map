@@ -7,6 +7,9 @@ import Footer from '../../components/Footer'
 import MainSection from '../../components/MainSection'
 import * as TalksActions from '../../actions/talks'
 import style from './style.css'
+import io from 'socket.io-client';
+
+const socket = io();
 
 class App extends Component {
   render() {
@@ -15,7 +18,7 @@ class App extends Component {
     return (
       <div className={style.normal}>
         <Header />
-        <MainSection talks={talks} actions={actions} />
+        <MainSection talks={talks} actions={actions} socket={socket} />
         <Footer />
         {children}
       </div>
