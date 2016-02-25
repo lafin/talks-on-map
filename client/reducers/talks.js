@@ -14,6 +14,10 @@ export default handleActions({
   },
 
   'get talks' (state, action) {
+    const socket = action.payload
+    setTimeout(() => {
+      socket.emit('request talks')
+    }, 1e3)
     return state
   }
 }, initialState)

@@ -2,25 +2,30 @@ var rucksack = require('rucksack-css')
 var webpack = require('webpack')
 var path = require('path')
 
-module.exports = {
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+var isDev = process.env.NODE_ENV === 'development'
+
+var config = {
   context: path.join(__dirname, './client'),
   entry: {
-    jsx: './index.js',
-    html: './index.html',
+    index: ['./index.html', './index.js'],
     vendor: ['react']
   },
   output: {
     path: path.join(__dirname, './static'),
     filename: 'bundle.js',
+    publicPath: '/dist/'
   },
   module: {
     loaders: [
       {
         test: /\.html$/,
+        include: /client/,
         loader: 'file?name=[name].[ext]'
       },
       {
         test: /\.css$/,
+        include: /client/,
         loaders: [
           'style',
           'css?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
@@ -28,20 +33,24 @@ module.exports = {
         ]
       },
       {
+        test: /\.css$/,
+        exclude: /client/,
+        loader: 'style!css'
+      },
+      {
         test: /\.json$/,
+        exclude: /client/,
         loader: 'json'
       },
       {
         test: /\.js$/,
+        exclude: /client/,
         loader: 'transform/cacheable?brfs'
       },
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loaders: [
-          'react-hot',
-          'babel'
-        ]
+        include: /client/,
+        loader: 'react-hot!babel'
       }
     ],
   },
@@ -57,14 +66,20 @@ module.exports = {
     })
   ],
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development') }
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
     })
   ],
-  devServer: {
-    contentBase: './client',
-    hot: true
-  },
-  bail: process.env.TRAVIS || false
+  bail: process.env.TRAVIS
 }
+
+if (isDev) {
+  config.entry.index.push('webpack-hot-middleware/client')
+}
+
+module.exports = config

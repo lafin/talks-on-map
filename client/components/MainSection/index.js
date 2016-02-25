@@ -11,10 +11,11 @@ class MainSection extends Component {
 
   componentDidMount() {
     const { talks, actions, socket } = this.props
-    socket.emit('get points')
-    socket.on('get points', () =>
-      actions.getTalks()
-    );
+
+    actions.getTalks(socket)
+    socket.on('response talks', () => {
+      actions.getTalks(socket)
+    });
   }
 
   render() {
