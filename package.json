@@ -38,6 +38,7 @@
     "redux-actions": "^0.9.1",
     "rucksack-css": "^0.8.5",
     "socket.io": "^1.4.5",
+    "socket.io-client": "^1.4.5",
     "style-loader": "^0.13.0",
     "transform-loader": "^0.2.3",
     "webgl-heatmap": "^0.2.3",
