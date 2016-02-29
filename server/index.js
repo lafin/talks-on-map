@@ -21,16 +21,16 @@ if (isDev) {
 }
 
 app.use('/dist', express.static(path.join(__dirname, '..', 'static')));
-app.get('*', function(req, res) {
+app.get('*', function (req, res) {
   return res.type('html').send(fs.readFileSync(path.join(__dirname, '..', 'client/index.html')));
 });
 
-const server = app.listen(process.env.PORT, function(error) {
+const server = app.listen(process.env.PORT, function (error) {
   if (error) {
     return console.error(error);
   }
   console.log('server listening on port: %s', process.env.PORT);
 });
 
-const io = new Socket(server)
+const io = new Socket(server);
 const events = require('./events')(io);

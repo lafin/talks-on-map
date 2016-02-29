@@ -46,5 +46,11 @@
     "webpack-dev-middleware": "^1.5.1",
     "webpack-hot-middleware": "^2.7.1",
     "webworkify-webpack": "^1.0.4"
+  },
+  "dependencies": {
+    "memory-cache": "^0.1.4",
+    "node-uuid": "^1.4.7",
+    "request": "^2.69.0",
+    "xml2js": "^0.4.16"
   }
 }

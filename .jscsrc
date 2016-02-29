@@ -1,0 +1,6 @@
+{
+  "preset": "airbnb",
+  "requireCamelCaseOrUpperCaseIdentifiers": null,
+  "requirePaddingNewLinesAfterBlocks": null,
+  "requireTrailingComma": null
+}
