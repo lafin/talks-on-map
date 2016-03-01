@@ -10,7 +10,7 @@ class Map extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      map: {
+      overlay: {
         width: 700,
         height: 450,
         latitude: 37.785,
@@ -24,13 +24,13 @@ class Map extends Component {
 
   onChangeViewport(opt) {
     this.setState({
-      map: Object.assign({}, this.state.map, opt)
+      overlay: Object.assign({}, this.state.overlay, opt)
     });
   }
 
   render() {
     const { talks } = this.props
-    const overlay = this.state.map
+    const { overlay } = this.state
     const locations = [{
       latitude: 37.785,
       longitude: -122.459
@@ -47,6 +47,10 @@ class Map extends Component {
       latitude: 37.785,
       longitude: -122.459
     }]
+
+    MapGL.fitBounds(overlay.width, overlay.height, talks.bounds);
+    overlay.latitude = talks.center.latitude
+    overlay.longitude = talks.center.longitude
 
     return (
       <MapGL

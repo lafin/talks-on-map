@@ -162,8 +162,8 @@ const getMessages = (city, callback) => {
               messages.push({
                 type: +point.$.catidx,
                 coords: {
-                  lat: +point.$.lat,
-                  lon: +point.$.lon
+                  longitude: +point.$.lat,
+                  latitude: +point.$.lon
                 },
                 text: point.comment[0],
                 time: utils.timeDecode(point.time[0])
@@ -176,12 +176,15 @@ const getMessages = (city, callback) => {
             city: {
               name: cityObj.name,
               center: {
-                lat: +coordObj[0],
-                lon: +coordObj[1]
+                longitude: +coordObj[0],
+                latitude: +coordObj[1]
               },
-              coords: coords
+              bounds: [
+                [coords.tl_lat, coords.tl_lon],
+                [coords.br_lat, coords.br_lon],
+              ]
             },
-            messages: messages
+            points: messages
           });
         });
       });
@@ -201,8 +204,8 @@ const mergeMessagesBeforeSave = (city, messages) => {
     for (const cachedMessage of cachedMessages[city]) {
       if (message.text === cachedMessage.text &&
         message.type === cachedMessage.type &&
-        (message.coords.lat).toFixed(4) === (message.coords.lat).toFixed(4) &&
-        (message.coords.lon).toFixed(4) === (message.coords.lon).toFixed(4)) {
+        (message.coords.longitude).toFixed(4) === (message.coords.longitude).toFixed(4) &&
+        (message.coords.latitude).toFixed(4) === (message.coords.latitude).toFixed(4)) {
         cachedMessage.ttl = Date.now() + 30e3;
         found = true;
       }
@@ -227,7 +230,7 @@ module.exports = {
       if (error || !response) {
         return callback(error || new Error('Empty response'));
       }
-      response.messages = mergeMessagesBeforeSave(city, response.messages);
+      response.points = mergeMessagesBeforeSave(city, response.points);
       cache.put('messages:' + city, response, 5e3);
       return callback(null, response);
     });

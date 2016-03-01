@@ -12,15 +12,17 @@ class MainSection extends Component {
   componentDidMount() {
     const { talks, actions, socket } = this.props
 
-    actions.getTalks(socket)
-    socket.on('response talks', () => {
-      actions.getTalks(socket)
-    });
+    actions.setCity({
+      socket: socket,
+      city: null
+    })
+
+    socket.on('response talks', actions.setTalks)
+    socket.on('response info', actions.setInfo)
   }
 
   render() {
     const { talks, actions } = this.props
-
     return (
       <section className={style.main}>
         <Map talks={talks} actions={actions} />
