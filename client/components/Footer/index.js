@@ -7,6 +7,7 @@ class Footer extends Component {
   render() {
     return (
       <footer className={style.normal}>
+        <h1>Footer</h1>
       </footer>
     )
   }

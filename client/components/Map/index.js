@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import style from './style.css'
+import Immutable from 'immutable'
 
 import MapGL from 'react-map-gl'
 import HeatmapOverlay from 'react-map-gl-heatmap-overlay'
@@ -36,15 +37,18 @@ class Map extends Component {
     }
 
     return (
-      <MapGL
-        {...overlay}
-        onChangeViewport={this.onChangeViewport.bind(this)} >
-        <HeatmapOverlay
+      <section className={classnames(style.main, "column")}>
+        <MapGL
           {...overlay}
-          locations={locations}
-          intensityAccessor={locations => 1 / 10}
-          sizeAccessor={locations => 40} />
-      </MapGL>
+          onChangeViewport={this.onChangeViewport.bind(this)} >
+          <HeatmapOverlay
+            {...overlay}
+            locations={locations}
+            gradientColors={Immutable.List(['lightskyblue', 'lime', 'yellow', 'orange', 'red'])}
+            intensityAccessor={locations => 1 / 10}
+            sizeAccessor={locations => 40} />
+        </MapGL>
+      </section>
     )
   }
 }

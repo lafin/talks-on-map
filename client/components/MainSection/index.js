@@ -1,7 +1,8 @@
 
 import React, { Component } from 'react'
 import Map from '../Map'
-import Message from '../Message'
+import Messages from '../Messages'
+import classnames from 'classnames'
 import style from './style.css'
 
 class MainSection extends Component {
@@ -13,9 +14,9 @@ class MainSection extends Component {
     const { talks, actions } = this.props
 
     return (
-      <section className={style.main}>
+      <section className={classnames(style.main, "columns")}>
         <Map talks={talks} actions={actions} />
-        <Message talks={talks} actions={actions} />
+        <Messages talks={talks} actions={actions} />
       </section>
     )
   }

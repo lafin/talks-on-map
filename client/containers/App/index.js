@@ -7,6 +7,7 @@ import Footer from '../../components/Footer'
 import MainSection from '../../components/MainSection'
 import * as TalksActions from '../../actions/talks'
 import style from './style.css'
+import 'bulma/css/bulma.css';
 import io from 'socket.io-client';
 
 class App extends Component {
