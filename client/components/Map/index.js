@@ -13,9 +13,7 @@ class Map extends Component {
       overlay: {
         width: 700,
         height: 450,
-        latitude: 37.785,
-        longitude: -122.459,
-        zoom: 11.136,
+        zoom: 0,
         mapStyle: 'mapbox://styles/mapbox/streets-v8',
         mapboxApiAccessToken: 'pk.eyJ1IjoibGFmaW4iLCJhIjoiY2lrbjQ2cWs4MDA4YXcwbTRhOWZ0a2UwZSJ9.uWxtYDe0xyX4ZnilLQWcig'
       }
@@ -30,27 +28,12 @@ class Map extends Component {
 
   render() {
     const { talks } = this.props
-    const { overlay } = this.state
-    const locations = [{
-      latitude: 37.785,
-      longitude: -122.459
-    }, {
-      latitude: 37.785,
-      longitude: -122.459
-    }, {
-      latitude: 37.785,
-      longitude: -122.459
-    }, {
-      latitude: 37.785,
-      longitude: -122.459
-    }, {
-      latitude: 37.785,
-      longitude: -122.459
-    }]
+    const locations = talks.points
+    let { overlay } = this.state
 
-    MapGL.fitBounds(overlay.width, overlay.height, talks.bounds);
-    overlay.latitude = talks.center.latitude
-    overlay.longitude = talks.center.longitude
+    if (!overlay.zoom) {
+      overlay = Object.assign({}, overlay, MapGL.fitBounds(overlay.height, overlay.width, talks.bounds))
+    }
 
     return (
       <MapGL
@@ -59,8 +42,8 @@ class Map extends Component {
         <HeatmapOverlay
           {...overlay}
           locations={locations}
-          intensityAccessor={location => 1 / 10}
-          sizeAccessor={location => 40} />
+          intensityAccessor={locations => 1 / 10}
+          sizeAccessor={locations => 40} />
       </MapGL>
     )
   }

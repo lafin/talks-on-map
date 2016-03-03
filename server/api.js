@@ -161,10 +161,8 @@ const getMessages = (city, callback) => {
               const point = response.gpx.wpt[i];
               messages.push({
                 type: +point.$.catidx,
-                coords: {
-                  longitude: +point.$.lat,
-                  latitude: +point.$.lon
-                },
+                longitude: +point.$.lon,
+                latitude: +point.$.lat,
                 text: point.comment[0],
                 time: utils.timeDecode(point.time[0])
               });
@@ -204,8 +202,8 @@ const mergeMessagesBeforeSave = (city, messages) => {
     for (const cachedMessage of cachedMessages[city]) {
       if (message.text === cachedMessage.text &&
         message.type === cachedMessage.type &&
-        (message.coords.longitude).toFixed(4) === (message.coords.longitude).toFixed(4) &&
-        (message.coords.latitude).toFixed(4) === (message.coords.latitude).toFixed(4)) {
+        (message.longitude).toFixed(4) === (message.longitude).toFixed(4) &&
+        (message.latitude).toFixed(4) === (message.latitude).toFixed(4)) {
         cachedMessage.ttl = Date.now() + 30e3;
         found = true;
       }
