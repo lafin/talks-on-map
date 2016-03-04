@@ -1,9 +1,9 @@
-var rucksack = require('rucksack-css')
-var webpack = require('webpack')
-var path = require('path')
+var rucksack = require('rucksack-css');
+var webpack = require('webpack');
+var path = require('path');
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-var isDev = process.env.NODE_ENV === 'development'
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+var isDev = process.env.NODE_ENV === 'development';
 
 var config = {
   context: path.join(__dirname, './client'),
@@ -76,10 +76,10 @@ var config = {
     })
   ],
   bail: process.env.TRAVIS
-}
+};
 
 if (isDev) {
-  config.entry.index.push('webpack-hot-middleware/client')
+  config.entry.index.push('webpack-hot-middleware/client');
 }
 
-module.exports = config
+module.exports = config;
