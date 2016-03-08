@@ -1,11 +1,12 @@
-
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
+import Map from '../../components/Map';
 import * as TalksActions from '../../actions/talks';
+import classnames from 'classnames';
 import style from './style.css';
 import 'bulma/css/bulma.css';
 import io from 'socket.io-client';
@@ -28,12 +29,13 @@ class App extends Component {
     const { talks, actions, children } = this.props;
 
     return (
-      <div className={style.normal}>
+      <section className={classnames(style.main)}>
         <Header />
+        <Map talks={talks} actions={actions} />
         <MainSection talks={talks} actions={actions} />
         <Footer />
         {children}
-      </div>
+      </section>
     );
   }
 }

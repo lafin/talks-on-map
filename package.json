@@ -46,7 +46,7 @@
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-hot-middleware": "^2.9.1",
-    "webworkify-webpack": "^1.0.4"
+    "webworkify-webpack": "^1.0.5"
   },
   "dependencies": {
     "memory-cache": "^0.1.4",

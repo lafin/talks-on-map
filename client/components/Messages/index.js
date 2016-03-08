@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import style from './style.css';
@@ -44,15 +43,14 @@ class Messages extends Component {
     const groups = this.groupingMessages(points);
 
     return (
-      <section className={classnames(style.main, 'column')}>
-        <h1>Messages</h1>
+      <section className={classnames('section', style.main)}>
         {groups.map((group, key) => {
           return (
-            <div key={`group-${key}`} className={style.group}>
+            <section key={`group-${key}`} className={style.group}>
             {group.map((message, key) => {
-              return (<div key={`message-${key}`} className={style.message}>{message.text}</div>);
+              return (<section key={`message-${key}`} className={style.message}>{message.text}</section>);
             })}
-            </div>
+            </section>
           );
         })}
       </section>

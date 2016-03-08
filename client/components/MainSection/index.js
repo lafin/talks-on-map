@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import Map from '../Map';
 import Messages from '../Messages';
 import classnames from 'classnames';
 import style from './style.css';
@@ -14,8 +13,7 @@ class MainSection extends Component {
     const { talks, actions } = this.props;
 
     return (
-      <section className={classnames(style.main, 'columns')}>
-        <Map talks={talks} actions={actions} />
+      <section className={classnames(style.main)}>
         <Messages talks={talks} actions={actions} />
       </section>
     );

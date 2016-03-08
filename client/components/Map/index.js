@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import style from './style.css';
@@ -12,8 +11,8 @@ class Map extends Component {
     super(props, context);
     this.state = {
       overlay: {
-        width: 700,
-        height: 450,
+        width: window.innerWidth,
+        height: window.innerHeight,
         zoom: 0,
         mapStyle: 'mapbox://styles/mapbox/streets-v8',
         mapboxApiAccessToken: 'pk.eyJ1IjoibGFmaW4iLCJhIjoiY2lrbjQ2cWs4MDA4YXcwbTRhOWZ0a2UwZSJ9.uWxtYDe0xyX4ZnilLQWcig'
@@ -32,12 +31,16 @@ class Map extends Component {
     const locations = talks.points;
     let { overlay } = this.state;
 
+    overlay = Object.assign({}, overlay, {
+      height: window.innerHeight,
+      width: window.innerWidth
+    });
     if (!overlay.zoom) {
       overlay = Object.assign({}, overlay, MapGL.fitBounds(overlay.height, overlay.width, talks.bounds));
     }
 
     return (
-      <section className={classnames(style.main, 'column')}>
+      <section className={style.main}>
         <MapGL
           {...overlay}
           onChangeViewport={this.onChangeViewport.bind(this)} >
