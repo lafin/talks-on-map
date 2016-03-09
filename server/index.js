@@ -1,18 +1,18 @@
 const express = require('express');
-const webpack = require('webpack');
 const Socket = require('socket.io');
 const path = require('path');
 const fs = require('fs');
-const config = require('../webpack.config.js');
 
 const app = express();
-const compiler = webpack(config);
 
 process.env.PORT = process.env.PORT || 3000;
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const isDev = process.env.NODE_ENV === 'development';
 
 if (isDev) {
+  const config = require('../webpack.config.js');
+  const webpack = require('webpack');
+  const compiler = webpack(config);
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath

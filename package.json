@@ -6,10 +6,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "build": "NODE_ENV=production webpack --progress --colors"
+    "build": "NODE_ENV=production webpack --progress --colors",
+    "postinstall": "npm run build"
   },
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "babel-core": "^6.7.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-runtime": "^6.6.0",
@@ -25,6 +26,8 @@
     "file-loader": "^0.8.5",
     "immutable": "^3.7.6",
     "json-loader": "^0.5.4",
+    "memory-cache": "^0.1.4",
+    "node-uuid": "^1.4.7",
     "postcss-loader": "^0.8.1",
     "r-dom": "^2.1.0",
     "react": "next",
@@ -37,6 +40,7 @@
     "react-router-redux": "^4.0.0",
     "redux": "^3.3.1",
     "redux-actions": "^0.9.1",
+    "request": "^2.69.0",
     "rucksack-css": "^0.8.5",
     "socket.io": "^1.4.5",
     "socket.io-client": "^1.4.5",
@@ -46,13 +50,7 @@
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-hot-middleware": "^2.9.1",
-    "webworkify-webpack": "^1.0.5"
-  },
-  "dependencies": {
-    "express": "^4.13.4",
-    "memory-cache": "^0.1.4",
-    "node-uuid": "^1.4.7",
-    "request": "^2.69.0",
+    "webworkify-webpack": "^1.0.5",
     "xml2js": "^0.4.16"
   }
 }
