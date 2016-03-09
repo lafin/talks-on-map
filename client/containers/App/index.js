@@ -29,13 +29,13 @@ class App extends Component {
     const { talks, actions, children } = this.props;
 
     return (
-      <section className={classnames(style.main)}>
+      <div className={classnames(style.main)}>
         <Header />
         <Map talks={talks} actions={actions} />
         <MainSection talks={talks} actions={actions} />
         <Footer />
         {children}
-      </section>
+      </div>
     );
   }
 }

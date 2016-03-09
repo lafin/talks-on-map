@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import Messages from '../Messages';
 import classnames from 'classnames';
@@ -13,9 +12,9 @@ class MainSection extends Component {
     const { talks, actions } = this.props;
 
     return (
-      <section className={classnames(style.main)}>
+      <div className={classnames(style.main)}>
         <Messages talks={talks} actions={actions} />
-      </section>
+      </div>
     );
   }
 }

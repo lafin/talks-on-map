@@ -1,5 +1,10 @@
 .main {
-
+  z-index: 1;
+  position: relative;
+  width: 25%;
+  float: right;
+  overflow-y: auto;
+  composes: background from "../style.css";
 }
 
 .group:nth-child(2n) {

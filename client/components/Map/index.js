@@ -40,7 +40,7 @@ class Map extends Component {
     }
 
     return (
-      <section className={style.main}>
+      <div className={style.main}>
         <MapGL
           {...overlay}
           onChangeViewport={this.onChangeViewport.bind(this)} >
@@ -51,7 +51,7 @@ class Map extends Component {
             intensityAccessor={locations => 1 / 10}
             sizeAccessor={locations => 40} />
         </MapGL>
-      </section>
+      </div>
     );
   }
 }

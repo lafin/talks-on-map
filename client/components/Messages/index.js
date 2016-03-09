@@ -37,23 +37,27 @@ class Messages extends Component {
     return groups.map(group => group.sort((a, b) => a.time - b.time));
   }
 
+  componentDidUpdate() {
+    this.refs.messages.style.height = (window.innerHeight - 40) + 'px';
+  }
+
   render() {
     const { talks } = this.props;
     const points = talks.points;
     const groups = this.groupingMessages(points);
 
     return (
-      <section className={classnames('section', style.main)}>
+      <div ref="messages" className={classnames(style.main)}>
         {groups.map((group, key) => {
           return (
-            <section key={`group-${key}`} className={style.group}>
-            {group.map((message, key) => {
-              return (<section key={`message-${key}`} className={style.message}>{message.text}</section>);
-            })}
-            </section>
+            <div key={`group-${key}`} className={style.group}>
+              {group.map((message, key) => {
+                return (<div key={`message-${key}`} className={style.message}>{message.text}</div>);
+              })}
+            </div>
           );
         })}
-      </section>
+      </div>
     );
   }
 }

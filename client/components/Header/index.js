@@ -5,9 +5,9 @@ import style from './style.css';
 class Header extends Component {
   render() {
     return (
-      <header className={classnames('header', style.main)}>
+      <div className={classnames(style.main)}>
         Header
-      </header>
+      </div>
     );
   }
 }
