@@ -5,7 +5,31 @@ var path = require('path');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var isDev = process.env.NODE_ENV === 'development';
 
+var plugins = [
+  new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    }
+  })
+];
+
+if (isDev) {
+  var seed = [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+  ];
+} else {
+  var seed = [
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: false
+    })
+  ];
+}
+plugins = seed.concat(plugins);
+
 var config = {
+  devtool: 'inline-source-map',
   context: path.join(__dirname, './client'),
   entry: {
     index: ['./index.html', './index.js'],
@@ -65,19 +89,9 @@ var config = {
       autoprefixer: true
     })
   ],
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-      }
-    })
-  ],
+  plugins: plugins,
   bail: process.env.TRAVIS
 };
-
 if (isDev) {
   config.entry.index.push('webpack-hot-middleware/client');
 }
