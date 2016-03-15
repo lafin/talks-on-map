@@ -31,10 +31,6 @@ class Map extends Component {
     const locations = talks.points;
     let { overlay } = this.state;
 
-    overlay = Object.assign({}, overlay, {
-      height: window.innerHeight,
-      width: window.innerWidth
-    });
     if (!overlay.zoom) {
       overlay = Object.assign({}, overlay, MapGL.fitBounds(overlay.height, overlay.width, talks.bounds));
     }
