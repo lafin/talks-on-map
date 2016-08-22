@@ -23,7 +23,8 @@ if (isDev) {
   var seed = [
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false
-    })
+    }),
+    new webpack.NoErrorsPlugin()
   ];
 }
 plugins = seed.concat(plugins);
