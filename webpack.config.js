@@ -49,27 +49,17 @@ var config = {
       },
       {
         test: /\.css$/,
+        exclude: /client/,
+        loader: 'style!css'
+      },
+      {
+        test: /\.css$/,
         include: /client/,
         loaders: [
           'style',
           'css?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
           'postcss'
         ]
-      },
-      {
-        test: /\.css$/,
-        exclude: /client/,
-        loader: 'style!css'
-      },
-      {
-        test: /\.json$/,
-        exclude: /client/,
-        loader: 'json'
-      },
-      {
-        test: /\.js$/,
-        exclude: /client/,
-        loader: 'transform/cacheable?brfs'
       },
       {
         test: /\.(js|jsx)$/,
@@ -80,9 +70,7 @@ var config = {
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
-    alias: {
-      webworkify: 'webworkify-webpack'
-    }
+    alias: {}
   },
   postcss: [
     rucksack({

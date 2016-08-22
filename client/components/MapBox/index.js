@@ -1,0 +1,62 @@
+import React, { Component } from 'react';
+import classnames from 'classnames';
+import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
+import HeatmapLayer from 'react-leaflet-heatmap-layer';
+
+import Immutable from 'immutable';
+import style from './style.css';
+
+class MapBox extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      overlay: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        zoom: 10,
+        url: 'http://tiles.maps.sputnik.ru/{z}/{x}/{y}.png' + (L.Browser.retina ? '?tag=retina' : ''),
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }
+    };
+  }
+
+  onChangeViewport(opt) {
+    this.setState({
+      overlay: Object.assign({}, this.state.overlay, opt)
+    });
+  }
+
+  render() {
+    const { talks } = this.props;
+    const points = talks.points;
+    let { overlay } = this.state;
+
+    const position = [0, 0];
+    const gradient = {'0.1':'blue','0.2':'lime','1.0':'red'};
+
+    return (
+      <div className={style.main}>
+        <Map center={position} {...overlay} >
+          <HeatmapLayer
+            fitBoundsOnLoad
+            fitBoundsOnUpdate
+            points={points}
+            radius={15}
+            minOpacity={0.6}
+            gradient={gradient}
+            longitudeExtractor={point => point.longitude}
+            latitudeExtractor={point => point.latitude}
+            intensityExtractor={_ => 30} />
+          <TileLayer {...overlay} />
+          <Marker position={position}>
+            <Popup>
+              <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
+            </Popup>
+          </Marker>
+        </Map>
+      </div>
+    );
+  }
+}
+
+export default MapBox;
