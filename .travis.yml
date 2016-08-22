@@ -4,6 +4,8 @@ language: node_js
 node_js:
   - "4"
   - "6"
+env:
+  - CXX=g++-4.8
 branches:
   only:
     - dev
@@ -16,7 +18,7 @@ addons:
 notifications:
   email:
     - kuvakin@gmail.com
+before_install: npm install npm -g
 install:
-  - export CXX=g++-4.8
   - npm install
   - npm run build
