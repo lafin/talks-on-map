@@ -11,7 +11,7 @@ class MapBox extends Component {
         width: window.innerWidth,
         height: window.innerHeight,
         zoom: 10,
-        url: '//tiles.maps.sputnik.ru/{z}/{x}/{y}.png' + (L.Browser.retina ? '?tag=retina' : ''),
+        url: 'http://tiles.maps.sputnik.ru/{z}/{x}/{y}.png' + (L.Browser.retina ? '?tag=retina' : ''),
         attribution: false
       }
     };
