@@ -7,7 +7,6 @@ import MainSection from '../../components/MainSection';
 import MapBox from '../../components/MapBox';
 import * as TalksActions from '../../actions/talks';
 import classnames from 'classnames';
-import io from 'socket.io-client';
 
 import style from './style.css';
 import 'bulma/css/bulma.css';
@@ -15,15 +14,10 @@ import 'bulma/css/bulma.css';
 class App extends Component {
   componentDidMount() {
     const { talks, actions } = this.props;
-    const socket = io();
 
     actions.setCity({
-      socket: socket,
       city: null
     });
-
-    socket.on('response talks', actions.setTalks);
-    socket.on('response info', actions.setInfo);
   }
 
   render() {
@@ -31,7 +25,7 @@ class App extends Component {
 
     return (
       <div className={classnames(style.main)}>
-        <Header />
+        <Header actions={actions} />
         <MapBox talks={talks} actions={actions} />
         <MainSection talks={talks} actions={actions} />
         <Footer />

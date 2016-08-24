@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
-
-import Immutable from 'immutable';
 import style from './style.css';
 
 class MapBox extends Component {
@@ -14,8 +11,8 @@ class MapBox extends Component {
         width: window.innerWidth,
         height: window.innerHeight,
         zoom: 10,
-        url: 'http://tiles.maps.sputnik.ru/{z}/{x}/{y}.png' + (L.Browser.retina ? '?tag=retina' : ''),
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url: '//tiles.maps.sputnik.ru/{z}/{x}/{y}.png' + (L.Browser.retina ? '?tag=retina' : ''),
+        attribution: false
       }
     };
   }
@@ -27,12 +24,11 @@ class MapBox extends Component {
   }
 
   render() {
+    const position = [0, 0];
+    const gradient = {'0.1':'blue','0.2':'lime','1.0':'red'};
     const { talks } = this.props;
     const points = talks.points;
     let { overlay } = this.state;
-
-    const position = [0, 0];
-    const gradient = {'0.1':'blue','0.2':'lime','1.0':'red'};
 
     return (
       <div className={style.main}>
