@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import MainSection from '../../components/MainSection';
+import Messages from '../../components/Messages';
 import MapBox from '../../components/MapBox';
 import * as TalksActions from '../../actions/talks';
 import classnames from 'classnames';
@@ -27,7 +27,7 @@ class App extends Component {
       <div className={classnames(style.main)}>
         <Header actions={actions} />
         <MapBox talks={talks} actions={actions} />
-        <MainSection talks={talks} actions={actions} />
+        <Messages talks={talks} actions={actions} />
         <Footer />
         {children}
       </div>

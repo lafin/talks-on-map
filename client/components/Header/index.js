@@ -9,6 +9,10 @@ class Header extends Component {
     this.actions = props.actions;
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   onChange(event) {
     this.actions.setCity({
       city: event.target.value
