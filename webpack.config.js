@@ -65,7 +65,7 @@ var config = {
       {
         test: /\.(js|jsx)$/,
         include: /client/,
-        loader: 'react-hot!babel'
+        loader: 'babel'
       }
     ],
   },
@@ -82,7 +82,7 @@ var config = {
   bail: process.env.TRAVIS
 };
 if (isDev) {
-  config.entry.index.push('webpack-hot-middleware/client');
+  config.entry.index.push('webpack-hot-middleware/client?reload=true');
 }
 
 module.exports = config;
