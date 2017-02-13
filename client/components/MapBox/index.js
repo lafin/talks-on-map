@@ -11,7 +11,7 @@ class MapBox extends Component {
         width: window.innerWidth,
         height: window.innerHeight,
         zoom: 10,
-        url: 'http://tiles.maps.sputnik.ru/{z}/{x}/{y}.png' + (L.Browser.retina ? '?tag=retina' : ''),
+        url: `http://tiles.maps.sputnik.ru/{z}/{x}/{y}.png${L.Browser.retina ? '?tag=retina' : ''}`,
         attribution: false
       }
     };
@@ -25,10 +25,10 @@ class MapBox extends Component {
 
   render() {
     const position = [0, 0];
-    const gradient = {'0.1':'blue','0.2':'lime','1.0':'red'};
+    const gradient = { 0.1: 'blue', 0.2: 'lime', '1.0': 'red' };
     const { talks } = this.props;
     const points = talks.points;
-    let { overlay } = this.state;
+    const { overlay } = this.state;
 
     return (
       <div className={style.main}>
@@ -42,11 +42,12 @@ class MapBox extends Component {
             gradient={gradient}
             longitudeExtractor={point => point.longitude}
             latitudeExtractor={point => point.latitude}
-            intensityExtractor={_ => 30} />
+            intensityExtractor={_ => 30}
+          />
           <TileLayer {...overlay} />
           <Marker position={position}>
             <Popup>
-              <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
+              <span>A pretty CSS3 popup.<br />Easily customizable.</span>
             </Popup>
           </Marker>
         </Map>

@@ -1,4 +1,4 @@
-'use strict';
+
 
 const request = require('request');
 const xmlParse = require('xml2js').parseString;
@@ -15,7 +15,7 @@ const getCityInfoByName = (name) => {
   }
 
   const cities = config.cities;
-  for (let i = 0; i < cities.length; i++) {
+  for (let i = 0; i < cities.length; i += 1) {
     if (cities[i].name === name) {
       return cities[i];
     }
@@ -56,7 +56,6 @@ const getTrafficCongestion = (city, callback) => {
           response.info.weather[0].day.length &&
           response.info.weather[0].day[0].day_part &&
           response.info.weather[0].day[0].day_part.length) {
-
         const traffic = response.info.traffic[0];
         const weather = response.info.weather[0].day[0].day_part[0];
 
@@ -71,9 +70,8 @@ const getTrafficCongestion = (city, callback) => {
             dampness: +weather.dampness[0]
           }
         });
-      } else {
-        return callback(new Error('Empty response'));
       }
+      return callback(new Error('Empty response'));
     });
   });
 };
@@ -157,7 +155,7 @@ const getMessages = (city, callback) => {
           }
 
           if (response.gpx && response.gpx.wpt) {
-            for (let i = 0; i < response.gpx.wpt.length; i++) {
+            for (let i = 0; i < response.gpx.wpt.length; i += 1) {
               const point = response.gpx.wpt[i];
               messages.push({
                 type: +point.$.catidx,
@@ -186,9 +184,8 @@ const getMessages = (city, callback) => {
           });
         });
       });
-    } else {
-      return callback(new Error('Can\'t get coords'));
     }
+    return callback(new Error('Can\'t get coords'));
   });
 };
 
@@ -219,7 +216,7 @@ const mergeMessagesBeforeSave = (city, messages) => {
 
 module.exports = {
   getMessages: (city, callback) => {
-    const messages = cache.get('messages:' + city);
+    const messages = cache.get(`messages:${city}`);
     if (messages) {
       return callback(null, messages);
     }
@@ -229,13 +226,13 @@ module.exports = {
         return callback(error || new Error('Empty response'));
       }
       response.points = mergeMessagesBeforeSave(city, response.points);
-      cache.put('messages:' + city, response, 5e3);
+      cache.put(`messages:${city}`, response, 5e3);
       return callback(null, response);
     });
   },
 
   getInfo: (city, callback) => {
-    const info = cache.get('info:' + city);
+    const info = cache.get(`info:${city}`);
     if (info) {
       return callback(null, info);
     }
@@ -245,7 +242,7 @@ module.exports = {
         return callback(error || new Error('Empty response'));
       }
 
-      cache.put('info:' + city, response, 15e3);
+      cache.put(`info:${city}`, response, 15e3);
       return callback(null, response);
     });
   }

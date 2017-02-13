@@ -1,24 +1,17 @@
-os:
-  - linux
 language: node_js
 node_js:
-  - "4"
   - "6"
 env:
   - CXX=g++-4.8
-branches:
-  only:
-    - dev
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
+      - ubuntu-toolchain-r-test
     packages:
-    - g++-4.8
-notifications:
-  email:
-    - kuvakin@gmail.com
-before_install: npm install npm -g
-install:
-  - npm install
-  - npm run build
+      - g++-4.8
+branches:
+  only:
+    - dev
+before_install: npm install -g yarn
+install: yarn --prod
+

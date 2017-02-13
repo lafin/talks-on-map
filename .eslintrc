@@ -1,29 +1,33 @@
-{
-  "extends": "eslint-config-airbnb",
-  "env": {
-    "browser": true,
-    "mocha": true,
-    "node": true
-  },
-  "rules": {
-    "react/jsx-uses-react": 2,
-    "react/jsx-uses-vars": 2,
-    "react/react-in-jsx-scope": 2,
+extends:
+  eslint-config-airbnb
 
-    "block-scoped-var": 0,
-    "padded-blocks": 0,
+parser:
+  babel-eslint
 
-    "no-param-reassign": 0,
-    "func-names": 0,
-    "no-shadow": 0,
-    "no-console": 0,
-    "strict": 0,
-    "no-else-return": 0,
-    "comma-dangle": 0,
-    "id-length": 0,
-    "no-use-before-define": 0
-  },
-  "plugins": [
-    "react"
-  ]
-}
+settings:
+  ecmascript: 6
+
+ecmaFeatures:
+  jsx: true
+  modules: true
+  destructuring: true
+  classes: true
+  forOf: true
+  blockBindings: true
+  arrowFunctions: true
+
+env:
+  browser: true
+
+rules:
+  indent: 2
+  func-style: 0
+  func-names: 0
+  comma-dangle: 0
+  no-console: 0
+  no-param-reassign: 0
+  linebreak-style: 0
+  import/no-extraneous-dependencies: 0
+  import/no-unresolved: 0
+  import/extensions: 0
+  react/jsx-filename-extension: 0
