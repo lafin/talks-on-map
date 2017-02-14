@@ -1,6 +1,6 @@
-export default socket => () => next => action => {
+export default socket => () => next => (action) => {
   action.payload = Object.assign(action.payload || {}, {
-    socket: socket
+    socket
   });
   return next(action);
 };

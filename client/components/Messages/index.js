@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import style from './style.css';
 
 class Messages extends Component {
-  constructor(props, context) {
-    super(props, context);
+  componentDidUpdate() {
+    this.messages.style.height = `${window.innerHeight - 40}px`;
   }
 
   distance(lat1, lon1, lat2, lon2) {
@@ -18,11 +18,11 @@ class Messages extends Component {
 
   groupingMessages(messages) {
     messages = [].concat(messages);
-    let groups = [];
-    for (let j = 0; j < messages.length; j++) {
+    const groups = [];
+    for (let j = 0; j < messages.length; j += 1) {
       const message = messages[j];
       let found;
-      for (let i = 0; i < groups.length; i++) {
+      for (let i = 0; i < groups.length; i += 1) {
         const group = groups[i];
         found = group.find(msg => this.distance(msg.latitude, msg.longitude, message.latitude, message.longitude) < 1);
         if (found) {
@@ -34,11 +34,24 @@ class Messages extends Component {
         groups[groups.length] = [message];
       }
     }
-    return groups.map(group => group.sort((a, b) => a.time - b.time));
-  }
-
-  componentDidUpdate() {
-    this.refs.messages.style.height = (window.innerHeight - 40) + 'px';
+    return groups.map(group => group.sort((a, b) => a.time - b.time)).map((group) => {
+      let maxLat = 0;
+      let minLon = Infinity;
+      group.map((message) => {
+        if (message.latitude > maxLat) {
+          maxLat = message.latitude;
+        }
+        if (message.longitude < minLon) {
+          minLon = message.longitude;
+        }
+        return message;
+      });
+      return {
+        maxLat,
+        minLon,
+        messages: group
+      };
+    });
   }
 
   render() {
@@ -47,16 +60,12 @@ class Messages extends Component {
     const groups = this.groupingMessages(points);
 
     return (
-      <div ref="messages" className={classnames(style.main)}>
-        {groups.map((group, key) => {
-          return (
-            <div key={`group-${key}`} className={style.group}>
-              {group.map((message, key) => {
-                return (<div key={`message-${key}`} className={style.message}>{message.text}</div>);
-              })}
-            </div>
-          );
-        })}
+      <div ref={(messages) => { this.messages = messages; }} className={classnames(style.main)}>
+        {groups.map(group => (
+          <div key={`group-${group.maxLat}-${group.minLon}`} className={style.group}>
+            {group.messages.map(message => (<div key={`message-${message.latitude}-${message.longitude}`} className={style.message}>{message.text}</div>))}
+          </div>
+          ))}
       </div>
     );
   }

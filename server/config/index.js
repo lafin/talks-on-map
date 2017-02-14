@@ -1,7 +1,6 @@
-'use strict';
 
 // TODO let? UglifyJs error
-var secret;
+let secret;
 try {
   secret = require('./secret');
 } catch (e) {

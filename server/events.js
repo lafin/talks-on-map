@@ -21,8 +21,8 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     hub.connectCounter += 1;
     socket.on('set city', (city) => {
-      for (const room in socket.rooms) {
-        socket.leave(room);
+      for (let i = 0; i < socket.rooms.length; i += 1) {
+        socket.leave(socket.rooms[i]);
       }
       socket.join(city);
       sendMessages(city, socket);

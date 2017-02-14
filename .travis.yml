@@ -14,4 +14,3 @@ branches:
     - dev
 before_install: npm install -g yarn
 install: yarn --prod
-

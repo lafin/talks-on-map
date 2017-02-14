@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
+import io from 'socket.io-client';
 
 import { logger, socket } from '../middleware';
 import rootReducer from '../reducers';
-import io from 'socket.io-client';
 import * as actions from '../actions/talks';
 
 export default function configure(initialState) {
@@ -10,7 +10,7 @@ export default function configure(initialState) {
     ? window.devToolsExtension()(createStore)
     : createStore;
 
-  const connection = io()
+  const connection = io();
   const createStoreWithMiddleware = applyMiddleware(
     logger,
     socket(connection)
@@ -18,25 +18,18 @@ export default function configure(initialState) {
 
   const store = createStoreWithMiddleware(rootReducer, initialState);
 
-  connection.on('response talks', data => {
-    let action = Object.assign({}, actions.setTalks(), {
+  connection.on('response talks', (data) => {
+    const action = Object.assign({}, actions.setTalks(), {
       payload: data
     });
     return store.dispatch(action);
   });
-  connection.on('response info', data => {
-    let action = Object.assign({}, actions.setInfo(), {
+  connection.on('response info', (data) => {
+    const action = Object.assign({}, actions.setInfo(), {
       payload: data
     });
     return store.dispatch(action);
   });
-
-  if (module.hot) {
-    module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers');
-      store.replaceReducer(nextReducer);
-    });
-  }
 
   return store;
 }

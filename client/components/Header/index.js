@@ -24,7 +24,7 @@ class Header extends Component {
       <div className={classnames(style.main)}>
         Header
         <select onChange={this.onChange}>
-          {config.cities.map((city, key) => (<option key={`city-${key}`}>{city.name}</option>))}
+          {config.cities.map(city => (<option key={`city-${city.name}`}>{city.name}</option>))}
         </select>
       </div>
     );

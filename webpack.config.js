@@ -51,7 +51,7 @@ module.exports = function (env) {
   }
 
   return {
-    devtool: isProd ? 'source-map' : 'eval',
+    devtool: 'source-map',
     context: sourcePath,
     entry: {
       js: './index.js',
@@ -75,9 +75,26 @@ module.exports = function (env) {
         },
         {
           test: /\.css$/,
+          exclude: /client/,
           use: [
             'style-loader',
             'css-loader'
+          ]
+        },
+        {
+          test: /\.css$/,
+          include: /client/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1,
+                localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
+              }
+            },
+            'postcss-loader'
           ]
         },
         {

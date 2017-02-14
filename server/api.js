@@ -1,5 +1,3 @@
-
-
 const request = require('request');
 const xmlParse = require('xml2js').parseString;
 const uuid = require('node-uuid');
@@ -191,12 +189,14 @@ const getMessages = (city, callback) => {
 
 const cachedMessages = {};
 const mergeMessagesBeforeSave = (city, messages) => {
-  if (!cachedMessages.hasOwnProperty(city)) {
+  if (!Object.prototype.hasOwnProperty.call(cachedMessages, 'city')) {
     cachedMessages[city] = [];
   }
-  for (const message of messages) {
+  for (let i = 0; i < messages.length; i += 1) {
+    const message = messages[i];
     let found = false;
-    for (const cachedMessage of cachedMessages[city]) {
+    for (let j = 0; j < cachedMessages[city].length; j += 1) {
+      const cachedMessage = cachedMessages[city][j];
       if (message.text === cachedMessage.text &&
         message.type === cachedMessage.type &&
         (message.longitude).toFixed(4) === (message.longitude).toFixed(4) &&

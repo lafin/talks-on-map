@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
+import 'bulma/css/bulma.css';
+import style from './style.css';
+
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Messages from '../../components/Messages';
 import MapBox from '../../components/MapBox';
 import * as TalksActions from '../../actions/talks';
-import classnames from 'classnames';
-
-import style from './style.css';
-import 'bulma/css/bulma.css';
 
 class App extends Component {
   componentDidMount() {

@@ -7,24 +7,24 @@ const initialState = {
 };
 
 export default handleActions({
-  'set city'(state, action) {
+  'set city': function (state, action) {
     const { socket, city } = action.payload;
     socket.emit('set city', city || initialState.city);
 
     return state;
   },
 
-  'set talks'(state, action) {
+  'set talks': function (state, action) {
     const { city, points } = action.payload;
 
     return Object.assign({}, {
       bounds: city.bounds,
       city: city.name,
-      points: points
+      points
     });
   },
 
-  'set info'(state, action) {
+  'set info': function (state) {
     return state;
   }
 }, initialState);
