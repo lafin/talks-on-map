@@ -57,4 +57,11 @@ class MapBox extends Component {
   }
 }
 
+MapBox.propTypes = {
+  talks: React.PropTypes.shape({
+    bounds: React.PropTypes.array,
+    points: React.PropTypes.array
+  }).isRequired
+};
+
 export default MapBox;

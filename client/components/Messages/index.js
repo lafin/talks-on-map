@@ -71,4 +71,11 @@ class Messages extends Component {
   }
 }
 
+Messages.propTypes = {
+  talks: React.PropTypes.shape({
+    city: React.PropTypes.string,
+    bounds: React.PropTypes.array
+  }).isRequired
+};
+
 export default Messages;

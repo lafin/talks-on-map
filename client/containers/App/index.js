@@ -13,7 +13,7 @@ import * as TalksActions from '../../actions/talks';
 
 class App extends Component {
   componentDidMount() {
-    const { talks, actions } = this.props;
+    const { actions } = this.props;
 
     actions.setCity({
       city: null
@@ -34,6 +34,16 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  talks: React.PropTypes.shape({
+    city: React.PropTypes.string,
+    bounds: React.PropTypes.array
+  }).isRequired,
+  actions: React.PropTypes.shape({
+    setCity: React.PropTypes.func
+  }).isRequired
+};
 
 function mapStateToProps(state) {
   return {

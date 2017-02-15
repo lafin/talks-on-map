@@ -31,4 +31,10 @@ class Header extends Component {
   }
 }
 
+Header.propTypes = {
+  actions: React.PropTypes.shape({
+    setCity: React.PropTypes.func
+  }).isRequired
+};
+
 export default Header;
