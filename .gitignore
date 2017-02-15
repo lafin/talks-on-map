@@ -1,6 +1,5 @@
 .DS_STORE
 node_modules
-static
 .module-cache
 *.log*
 server/config/secret.js
